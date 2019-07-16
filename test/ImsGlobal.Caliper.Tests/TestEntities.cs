@@ -9,7 +9,6 @@ using ImsGlobal.Caliper.Entities.Media;
 using ImsGlobal.Caliper.Entities.Outcome;
 using ImsGlobal.Caliper.Entities.Reading;
 using ImsGlobal.Caliper.Entities.Session;
-using ImsGlobal.Caliper.Events.Outcome;
 using Newtonsoft.Json;
 using NodaTime;
 using ImsGlobal.Caliper.Entities.Search;
@@ -61,9 +60,11 @@ namespace ImsGlobal.Caliper.Tests {
         public static Instant Instant20161115101546 = Instant.FromUtc(2016, 11, 15, 10, 15, 46);
         public static Instant Instant20161115101720 = Instant.FromUtc(2016, 11, 15, 10, 17, 20);
         public static Instant Instant20180801060000 = Instant.FromUtc(2018, 08, 01, 06, 00, 00);
+        public static Instant Instant20180801090000 = Instant.FromUtc(2018, 08, 01, 09, 00, 00);
         public static Instant Instant20181115100000 = Instant.FromUtc(2018, 11, 15, 10, 00, 00);
         public static Instant Instant20181115100500 = Instant.FromUtc(2018, 11, 15, 10, 05, 00);
         public static Instant Instant20181115101500 = Instant.FromUtc(2018, 11, 15, 10, 15, 00);
+        public static Instant Instant20181115102000 = Instant.FromUtc(2018, 11, 15, 10, 20, 00);
 
         public static Person Person778899(ICaliperContext caliperContext = null)
         {
@@ -138,6 +139,18 @@ namespace ImsGlobal.Caliper.Tests {
             };
         }
 
+        public static Membership EntityMembership112233Instructor_2018(ICaliperContext caliperContext = null)
+        {
+            return new Membership ("https://example.edu/terms/201801/courses/7/sections/1/rosters/1", caliperContext)
+            {
+                Member = new Person("https://example.edu/users/112233", caliperContext),
+                Organization = new Organization("https://example.edu/terms/201801/courses/7/sections/1", caliperContext),
+                Roles = new[] { Role.Instructor },
+                Status = Status.Active,
+                DateCreated = Instant20180801060000
+            };
+        }
+
         public static CourseSection CourseSectionCPS43501Fall16(ICaliperContext caliperContext = null)
         {
             return new CourseSection
@@ -165,6 +178,18 @@ namespace ImsGlobal.Caliper.Tests {
                 CourseNumber = "CPS 435-01",
                 AcademicSession = "Fall 2018",
                 HideCaliperContext = true
+            };
+        }
+
+        public static CourseSection CourseSectionCPS43501Fall18b(ICaliperContext caliperContext = null)
+        {
+            return new CourseSection
+            ("https://example.edu/terms/201801/courses/7/sections/1", caliperContext)
+            {
+                Extensions = new
+                {
+                    edu_example_course_section_instructor = "https://example.edu/faculty/1234"
+                }
             };
         }
 
@@ -240,6 +265,15 @@ namespace ImsGlobal.Caliper.Tests {
             return new Session("https://example.com/sessions/c25fd3da-87fa-45f5-8875-b682113fa5ee", caliperContext) {
                 StartedAt = Instant20161115102000,
                 DateCreated = Instant20161115102000
+            };
+        }
+
+        public static Session Session1241_2018(ICaliperContext caliperContext = null)
+        {
+            return new Session("https://example.com/sessions/c25fd3da-87fa-45f5-8875-b682113fa5ee", caliperContext)
+            {
+                StartedAt = Instant20181115102000,
+                DateCreated = Instant20181115102000
             };
         }
 
@@ -537,7 +571,7 @@ namespace ImsGlobal.Caliper.Tests {
             {
                 Name = "Caliper Case Studies",
                 MediaType = "application/epub+zip",
-                DateCreated = Instant20160801090000
+                DateCreated = Instant20180801090000
             };
         }
 
@@ -744,13 +778,24 @@ namespace ImsGlobal.Caliper.Tests {
             public object lis = new
             {
                 person_sourcedid = "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
-                course_offering_sourcedid = "example.edu:SI182-F16",
-                course_section_sourcedid = "example.edu:SI182-001-F16"
+                course_offering_sourcedid = "example.edu:SI182-F18",
+                course_section_sourcedid = "example.edu:SI182-001-F18"
             };
 
             [JsonProperty("http://www.ExamplePlatformVendor.com/session")]
             public object session = new { id = "89023sj890dju080" };
-    };
+        };
+
+        public class LtiParamsLtiSession_2016 : LtiParamsLtiSession
+        {
+            [JsonProperty("https://purl.imsglobal.org/spec/lti/claim/lis")]
+            public new object lis = new
+            {
+                person_sourcedid = "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
+                course_offering_sourcedid = "example.edu:SI182-F16",
+                course_section_sourcedid = "example.edu:SI182-001-F16"
+            };
+        }
 
 
 
@@ -789,11 +834,6 @@ namespace ImsGlobal.Caliper.Tests {
                     HideCaliperContext = true
                 },
                 SearchResultsItemCount = 3,
-                SearchResults = new[] {
-                new DigitalResource("https://example.edu/catalog/record/01234?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29", caliperContext),
-                new DigitalResource("https://example.edu/catalog/record/09876?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29", caliperContext),
-                new DigitalResource("https://example.edu/catalog/record/05432?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29", caliperContext)
-            },
                 HideCaliperContext = true
             };
         }

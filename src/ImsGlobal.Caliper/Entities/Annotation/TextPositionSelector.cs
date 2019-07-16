@@ -9,7 +9,7 @@ namespace ImsGlobal.Caliper.Entities.Annotation {
 	/// </summary>
 	public class TextPositionSelector : Selector {
 
-		public TextPositionSelector() : base (SelectorType.Text) {}	
+		public TextPositionSelector(ICaliperContext caliperContext = null) : base (SelectorType.Text, caliperContext) {}	
 
 		[JsonProperty( "start", Order = 1 )]
 		public int Start { get; set; }

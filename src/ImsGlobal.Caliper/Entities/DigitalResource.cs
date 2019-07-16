@@ -15,9 +15,6 @@ namespace ImsGlobal.Caliper.Entities {
 		public DigitalResource(string id, ICaliperContext caliperContext = null) 
 			: base(id, caliperContext) {
             this.Type = EntityType.DigitalResource;
-			this.LearningObjectives = new List<LearningObjective>();
-			this.Keywords = new List<string>();
-            this.Creators = new List<Person>();
 		}
 
         [JsonProperty("storageName", Order = 12)]

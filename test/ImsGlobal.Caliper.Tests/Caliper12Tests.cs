@@ -33,6 +33,13 @@ namespace ImsGlobal.Caliper.Tests {
 	using static JsonSerializeUtils;
 	using System.Collections;
     using ImsGlobal.Caliper.Events.Search;
+    using System.Collections.Generic;
+    using ImsGlobal.Caliper.Entities.AggregateMeasure;
+    using ImsGlobal.Caliper.Entities.Feedback;
+    using ImsGlobal.Caliper.Entities.Survey;
+    using ImsGlobal.Caliper.Entities.ToolLaunch;
+    using ImsGlobal.Caliper.Entities.Search;
+    using ImsGlobal.Caliper.Events.Survey;
 
     [TestFixture]
 	public class Caliper12Tests
@@ -233,10 +240,9 @@ namespace ImsGlobal.Caliper.Tests {
                 AcademicSession = "Fall 2016",
                 Name = "CPS 435 Learning Analytics",
                 OtherIdentifiers = new[] {
-                    new {
-                        type = "SystemIdentifier",
-                        identifier = "example.edu:SI182-F16",
-                        identifierType = "LisSourcedId"
+                    new SystemIdentifier() {
+                        Identifier = "example.edu:SI182-F16",
+                        IdentifierType = "LisSourcedId"
                     }
                 },
                 DateCreated = CaliperTestEntities.Instant20160801060000,
@@ -262,10 +268,9 @@ namespace ImsGlobal.Caliper.Tests {
                 AcademicSession = "Fall 2016",
                 Name = "CPS 435 Learning Analytics, Section 01",
                 OtherIdentifiers = new[] {
-                    new {
-                        type = "SystemIdentifier",
-                        identifier = "example.edu:SI182-001-F16",
-                        identifierType = "LisSourcedId"
+                    new SystemIdentifier() {
+                        Identifier = "example.edu:SI182-001-F16",
+                        IdentifierType = "LisSourcedId"
                     }
                 },
                 Category = "seminar",
@@ -646,33 +651,37 @@ namespace ImsGlobal.Caliper.Tests {
         {
             var entity = new Person("https://example.edu/users/554433")
             {
-                OtherIdentifiers = new object[] {
-                    new {
-                      type = "SystemIdentifier",
-                      identifier = "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
-                      identifierType = "LisSourcedId",
+                OtherIdentifiers = new [] {
+                    new SystemIdentifier() {
+                      Identifier = "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
+                      IdentifierType = "LisSourcedId",
                     },
-                    new {
-                      type = "SystemIdentifier",
-                      identifier = "https://example.edu/users/554433",
-                      identifierType = "LtiUserId",
-                      source = new {
-                        id = "https://example.edu",
-                        type = "SoftwareApplication"
-                      }
+                    new SystemIdentifier() {
+                      Identifier = "https://example.edu/users/554433",
+                      IdentifierType = "LtiUserId",
+                      Source = new SoftwareApplication("https://example.edu") { HideCaliperContext = true }
                     },
-                    new {
-                      type = "SystemIdentifier",
-                      identifier = "jane@example.edu",
-                      identifierType = "EmailAddress",
-                      source = "https://example.edu"
+                    new SystemIdentifier() {
+                      Identifier = "jane@example.edu",
+                      IdentifierType = "EmailAddress",
+                      Source = new SoftwareApplication("https://example.edu") { HideCaliperContext = true }
+                    },
+                    new SystemIdentifier() {
+                        Identifier = "4567",
+                        IdentifierType = "SystemId",
+                        Extensions = new Dictionary<string, string> {
+                            { "com.examplePlatformVendor.identifier_type", "UserIdentifier" }
+                        }
                     }
                 },
                 DateCreated = CaliperTestEntities.Instant20160801060000,
                 DateModified = CaliperTestEntities.Instant20160902113000
             };
 
-            JsonAssertions.AssertSameObjectJson(entity, "caliperEntityPerson");
+            var coerced = JsonAssertions.coerce(entity,
+                            new string[] { "..otherIdentifiers[2].source" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEntityPerson");
         }
 
         [Test]
@@ -1078,25 +1087,26 @@ namespace ImsGlobal.Caliper.Tests {
             var person = new Person("https://example.edu/users/554433")
             {
                 OtherIdentifiers = new object[] {
-                   new {
-                      type = "SystemIdentifier",
-                      identifier = "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
-                      identifierType = "LisSourcedId"
+                   new SystemIdentifier() {
+                      Identifier = "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
+                      IdentifierType = "LisSourcedId"
                     },
-                    new {
-                      type = "SystemIdentifier",
-                      identifier = "https://example.edu/users/554433",
-                      identifierType = "LtiUserId",
-                      source = new {
-                        id = "https://example.edu",
-                        type = "SoftwareApplication"
-                      }
+                    new SystemIdentifier() {
+                      Identifier = "https://example.edu/users/554433",
+                      IdentifierType = "LtiUserId",
+                      Source = new SoftwareApplication("https://example.edu") { HideCaliperContext = true }
                     },
-                    new {
-                      type = "SystemIdentifier",
-                      identifier = "jane@example.edu",
-                      identifierType = "EmailAddress",
-                      source = "https://example.edu"
+                    new SystemIdentifier() {
+                      Identifier = "jane@example.edu",
+                      IdentifierType = "EmailAddress",
+                      Source = new SoftwareApplication("https://example.edu") { HideCaliperContext = true }
+                    },
+                    new SystemIdentifier() {
+                        Identifier = "4567",
+                        IdentifierType = "SystemId",
+                        Extensions = new Dictionary<string, string> {
+                            { "com.examplePlatformVendor.identifier_type", "UserIdentifier" }
+                        }
                     }
                 },
                 DateCreated = CaliperTestEntities.Instant20160801060000,
@@ -1132,10 +1142,9 @@ namespace ImsGlobal.Caliper.Tests {
                 CourseNumber = "CPS 435-01",
                 Name = "CPS 435 Learning Analytics, Section 01",
                 OtherIdentifiers = new[] {
-                    new {
-                        type = "SystemIdentifier",
-                        identifier = "example.edu:SI182-001-F16",
-                        identifierType = "LisSourcedId"
+                    new SystemIdentifier() {
+                        Identifier = "example.edu:SI182-001-F16",
+                        IdentifierType = "LisSourcedId"
                     }
                 },
                 Category = "seminar",
@@ -1243,7 +1252,10 @@ namespace ImsGlobal.Caliper.Tests {
                 }
             };
 
-            JsonAssertions.AssertSameObjectJson(envelope, "caliperEnvelopeMixedBatch", false);
+            var coerced = JsonAssertions.coerce(envelope,
+                            new string[] { "..data[0].otherIdentifiers[2].source" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEnvelopeMixedBatch", false);
         }
 
         [Test]
@@ -1670,74 +1682,6 @@ namespace ImsGlobal.Caliper.Tests {
 		}
 
 		[Test]
-		public void EventNavigationNavigatedTo_MatchesReferenceJson() {
-			var navEvent = new NavigationEvent(
-				"urn:uuid:ff9ec22a-fc59-4ae1-ae8d-2c9463ee2f8f") {
-
-				Actor = CaliperTestEntities.Person554433(),
-				Object = CaliperTestEntities.WebPage2(),
-				EventTime = CaliperTestEntities.Instant20161115101500,
-				Referrer = new WebPage("https://example.edu/terms/201601/courses/7/sections/1/pages/1"),
-				EdApp = new SoftwareApplication("https://example.edu"),
-				Group = CaliperTestEntities.CourseSectionCPS43501Fall16(),
-				Membership = CaliperTestEntities.EntityMembership554433Learner(),
-				Session = CaliperTestEntities.Session6259edu()
-            };
-
-			var coerced = JsonAssertions.coerce(navEvent,
-				new string[] { "..membership.member", "..membership.organization", "..edApp" });
-
-			JsonAssertions.AssertSameObjectJson(coerced, "caliperEventNavigationNavigatedTo");
-		}
-
-		[Test]
-		public void EventViewViewedFedSession_MatchesReferenceJson() {
-			var viewEvent = new ViewEvent("urn:uuid:4be6d29d-5728-44cd-8a8f-3d3f07e46b61") {
-				Actor = CaliperTestEntities.Person554433(),
-				Object = CaliperTestEntities.Epub202(),
-				EventTime = CaliperTestEntities.Instant20161115102000,
-				EdApp = new SoftwareApplication("https://example.com"),
-				Group = CaliperTestEntities.CourseSectionCPS43501Fall16b(),
-				Membership = CaliperTestEntities.EntityMembership554433Learner(),
-				Session = CaliperTestEntities.Session1241(),
-				FederatedSession = new LtiSession(
-                    "https://example.edu/lti/sessions/b533eb02823f31024e6b7f53436c42fb99b31241") {
-					User = CaliperTestEntities.Person554433(),
-                    MessageParameters = new CaliperTestEntities.LtiParamsLtiSession(),
-                    DateCreated = CaliperTestEntities.Instant20181115101500,
-					StartedAt = CaliperTestEntities.Instant20181115101500
-				},
-                Profile = ProfileType.Reading
-			};
-
-			var coerced = JsonAssertions.coerce(viewEvent,
-				new string[] { "..membership.member", "..membership.organization", "..edApp" });
-
-			JsonAssertions.AssertSameObjectJson(coerced, "caliperEventViewViewedFedSession");
-		}
-
-		[Test]
-		public void EventNavigationNavigatedToThinned_MatchesReferenceJson() {
-			var navEvent = new NavigationEvent("urn:uuid:71657137-8e6e-44f8-8499-e1c3df6810d2") {
-                Profile = ProfileType.General,
-				Actor = CaliperTestEntities.Person554433(),
-				Object = CaliperTestEntities.WebPage2(),
-				EventTime = CaliperTestEntities.Instant20161115101500,
-				Referrer = new WebPage("https://example.edu/terms/201601/courses/7/sections/1/pages/1"),
-				EdApp = new SoftwareApplication("https://example.edu"),
-				Group = CaliperTestEntities.CourseSectionCPS43501Fall16(),
-				Membership = CaliperTestEntities.EntityMembership554433Learner(),
-				Session = CaliperTestEntities.Session6259edu()
-            };
-
-			var coerced = JsonAssertions.coerce(navEvent,
-				new string[] { "..actor", "..object", "..referrer", "..edApp",
-				"..group", "..membership", "..session" });
-
-			JsonAssertions.AssertSameObjectJson(coerced, "caliperEventNavigationNavigatedToThinned");
-		}
-
-		[Test]
 		public void EventGradeGraded_MatchesReferenceJson() {
 			var gradeEvent = new GradeEvent("urn:uuid:a50ca17f-5971-47bb-8fca-4e6e6879001d", Action.Graded)
             {
@@ -1912,6 +1856,33 @@ namespace ImsGlobal.Caliper.Tests {
         }
 
         [Test]
+        public void EventToolUseUsedAnonymous_MatchesReferenceJson()
+        {
+            var toolUseEvent = new ToolUseEvent("urn:uuid:7c0fc54b-cf2a-426f-9203-b2c97fb77bfd", Action.Used)
+            {
+                Profile = ProfileType.ToolUse,
+                Actor = new Person("http://purl.imsglobal.org/caliper/Person") { HideCaliperContext = true },
+                Object = new SoftwareApplication("https://example.edu") { HideCaliperContext = true },
+                EventTime = CaliperTestEntities.Instant20181115101500,
+                EdApp = new SoftwareApplication("https://example.edu") { HideCaliperContext = true },
+                Group = new CourseSection("http://purl.imsglobal.org/caliper/CourseSection") { HideCaliperContext = true },
+                Membership = new Membership("http://purl.imsglobal.org/caliper/Membership")
+                {
+                    Member = new Person("http://purl.imsglobal.org/caliper/Person") { HideCaliperContext = true },
+                    Organization = new CourseSection("http://purl.imsglobal.org/caliper/CourseSection") { HideCaliperContext = true },
+                    Roles = new[] { Role.Learner },
+                    Status = Status.Active,
+                    HideCaliperContext = true
+                }
+            };
+
+            var coerced = JsonAssertions.coerce(toolUseEvent,
+                new string[] { "..edApp" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventToolUseUsedAnonymous");
+        }
+
+        [Test]
         public void EventToolLaunchLaunched_MatchesReferenceJson()
         {
             var viewEvent = new ToolLaunchEvent("urn:uuid:a2e8b214-4d4a-4456-bb4c-099945749117", Action.Launched)
@@ -1937,7 +1908,7 @@ namespace ImsGlobal.Caliper.Tests {
                 FederatedSession = new LtiSession("https://example.edu/lti/sessions/b533eb02823f31024e6b7f53436c42fb99b31241")
                 {
                     User = CaliperTestEntities.Person554433(),
-                    MessageParameters = new CaliperTestEntities.LtiParamsLtiSession(),
+                    MessageParameters = new CaliperTestEntities.LtiParamsLtiSession_2016(),
                     DateCreated = CaliperTestEntities.Instant20181115101500,
                     StartedAt = CaliperTestEntities.Instant20181115101500
                 }
@@ -1950,41 +1921,46 @@ namespace ImsGlobal.Caliper.Tests {
         }
 
         [Test]
-		public void EventViewViewed_MatchesReferenceJson() {
-			var viewEvent = new ViewEvent("urn:uuid:cd088ca7-c044-405c-bb41-0b2a8506f907") {
-                Profile = ProfileType.Reading,
-				Actor = CaliperTestEntities.Person554433(),
-				Object = CaliperTestEntities.Epub201(),
-				EventTime = CaliperTestEntities.Instant20161115101500,
-				EdApp = CaliperTestEntities.SoftwareAppV2(),
-				Group = CaliperTestEntities.CourseSectionCPS43501Fall16(),
-				Membership = CaliperTestEntities.EntityMembership554433Learner(),
-				Session = CaliperTestEntities.Session6259edu()
+        public void EventToolLaunchReturned_MatchesReferenceJson()
+        {
+            var toolLaunchEvent = new ToolLaunchEvent(
+                "urn:uuid:a2e8b214-4d4a-4456-bb4c-099945749117", Action.Returned)
+            {
+                Profile = ProfileType.ToolLaunch,
+                Actor = new Person("https://example.edu/users/554433") { HideCaliperContext = true },
+                Object = new SoftwareApplication("https://example.com/lti/tool") { HideCaliperContext = true },
+                EventTime = CaliperTestEntities.Instant20181115101500,
+                EdApp = new SoftwareApplication("https://example.edu") { HideCaliperContext = true },
+                Referrer = new Entity("https://tool.com/lti/123") { Type = EntityType.LtiLink, HideCaliperContext = true },
+                Group = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1")
+                {
+                    CourseNumber = "CPS 435-01",
+                    AcademicSession = "Fall 2018",
+                    HideCaliperContext = true
+                },
+                Membership = new Membership("https://example.edu/terms/201801/courses/7/sections/1/rosters/1")
+                {
+                    Member = new Person("https://example.edu/users/554433"),
+                    Organization = new Organization("https://example.edu/terms/201801/courses/7/sections/1"),
+                    Roles = new[] { Role.Learner },
+                    Status = Status.Active,
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                Session = CaliperTestEntities.Session6259_2018(),
+                Target = new Link("https://example.edu/terms/201801/courses/7/sections/1/pages/1") { HideCaliperContext = true },
+                FederatedSession = new LtiSession("https://example.edu/lti/sessions/b533eb02823f31024e6b7f53436c42fb99b31241")
+                {
+                    User = new Person("https://example.edu/users/554433") { HideCaliperContext = true },
+                    DateCreated = CaliperTestEntities.Instant20181115101500,
+                    StartedAt = CaliperTestEntities.Instant20181115101500,
+                    HideCaliperContext = true
+                }
             };
 
-			var coerced = JsonAssertions.coerce(viewEvent,
-				new string[] { "..membership.member", "..membership.organization", "..edApp" });
-			JsonAssertions.AssertSameObjectJson(coerced, "caliperEventViewViewed");
-		}
+            var coerced = JsonAssertions.coerce(toolLaunchEvent, new[] { "..membership.member", "..membership.organization" });
 
-		[Test]
-		public void EventViewViewedExtended_MatchesReferenceJson() {
-			var viewEvent = new ViewEvent("urn:uuid:3a9bd869-addc-48b1-80f6-a14b2ff591ed") {
-                Profile = ProfileType.Reading,
-				Actor = CaliperTestEntities.Person554433(),
-				Object = CaliperTestEntities.Epub200(),
-				EventTime = CaliperTestEntities.Instant20161115101500,
-				EdApp = CaliperTestEntities.SoftwareAppV2(),
-				Group = CaliperTestEntities.CourseSectionCPS43501Fall16(),
-				Membership = CaliperTestEntities.EntityMembership554433Learner(),
-				Session = CaliperTestEntities.Session6259edu(),
-				Extensions = new ViewEventExtension1()
-			};
-
-			var coerced = JsonAssertions.coerce(viewEvent,
-				new string[] { "..membership.member", "..membership.organization", "..edApp" });
-
-			JsonAssertions.AssertSameObjectJson(coerced, "caliperEventViewViewedExtended");
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventToolLaunchReturned");
         }
 
         [Test]
@@ -2108,7 +2084,8 @@ namespace ImsGlobal.Caliper.Tests {
                 Extensions = new { query = "Event or Entity" }
             };
 
-            caliperEvent.Context = new CaliperContextCollection(new CaliperContext(new { query = "http://schema.org/query" }));
+            caliperEvent.Context = new CaliperContextCollection();
+            caliperEvent.Context.Add(new CaliperContext(new { query = "http://schema.org/query" }));
             caliperEvent.Context.Add(CaliperContext.Context);
 
             var envelope = new CaliperMessage<Event>
@@ -2128,26 +2105,26 @@ namespace ImsGlobal.Caliper.Tests {
             {
                 OtherIdentifiers = new object[]
                 {
-                    new {
-                      type = "SystemIdentifier",
-                      identifier = "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
-                      identifierType = "LisSourcedId"
+                    new SystemIdentifier() {
+                      Identifier = "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
+                      IdentifierType = "LisSourcedId"
                     },
-                    new {
-                      type = "SystemIdentifier",
-                      identifier = "https://example.edu/users/554433",
-                      identifierType = "LtiUserId",
-                      source =  new {
-                        id = "https://example.edu",
-                        type = "SoftwareApplication"
-                      }
+                    new SystemIdentifier() {
+                      Identifier = "https://example.edu/users/554433",
+                      IdentifierType = "LtiUserId",
+                      Source =  new SoftwareApplication("https://example.edu") { HideCaliperContext = true }
                     },
-                    new
-                    {
-                      type = "SystemIdentifier",
-                      identifier = "jane@example.edu",
-                      identifierType = "EmailAddress",
-                      source = "https://example.edu"
+                    new SystemIdentifier() {
+                      Identifier = "jane@example.edu",
+                      IdentifierType = "EmailAddress",
+                      Source = new SoftwareApplication("https://example.edu") { HideCaliperContext = true }
+                    },
+                    new SystemIdentifier() {
+                        Identifier = "4567",
+                        IdentifierType = "SystemId",
+                        Extensions = new Dictionary<string, string> {
+                            { "com.examplePlatformVendor.identifier_type", "UserIdentifier" }
+                        }
                     }
                 },
                 DateCreated = CaliperTestEntities.Instant20160801060000,
@@ -2208,7 +2185,10 @@ namespace ImsGlobal.Caliper.Tests {
                 }
             };
 
-            JsonAssertions.AssertSameObjectJson(envelope, "caliperEnvelopeEntityBatch", false);
+            var coerced = JsonAssertions.coerce(envelope,
+                            new string[] { "..data[0].otherIdentifiers[2].source" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEnvelopeEntityBatch", false);
         }
 
         [Test]
@@ -2259,13 +2239,1627 @@ namespace ImsGlobal.Caliper.Tests {
             JsonAssertions.AssertSameObjectJson(evnt, "caliperEventGeneralModifiedExtended");
         }
 
-        public class ViewEventExtension1 {
-			[JsonProperty("job")]
-			public object Job = new {
-				id = "08c1233d-9ba3-40ac-952f-004c47a50ff7",
-				jobTag = "caliper_batch_job",
-				jobDate = "2016-11-16T01:01:00.000Z",
-			};
-		}
+        [Test]
+        public void EntityAggregateMeasure_MatchesReferenceJson()
+        {
+            var aggregateMeasure = new AggregateMeasure("urn:uuid:c3ba4c01-1f17-46e0-85dd-1e366e6ebb81")
+            {
+                Metric = MetricUnitType.UnitsCompleted,
+                Name = "Units Completed",
+                MetricValue = 12.0,
+                MaxMetricValue = 25.0,
+                StartedAtTime = Instant.FromUtc(2019, 08, 15, 10, 15, 00),
+                EndedAtTime = Instant.FromUtc(2019, 11, 15, 10, 15, 00)
+            };
+
+            JsonAssertions.AssertSameObjectJson(aggregateMeasure, "caliperEntityAggregateMeasure");
+        }
+
+        [Test]
+        public void EntityAggregateMeasureCollection_MatchesReferenceJson()
+        {
+            var aggregateMeasureCollection = new AggregateMeasureCollection("urn:uuid:60b4db01-f1e5-4a7f-add9-6a8f761625b1")
+            {
+                Items = new[] {
+                    new AggregateMeasure("urn:uuid:21c3f9f2-a9ef-4f65-bf9a-0699ed85e2c7")
+                    {
+                        Metric = MetricUnitType.MinutesOnTask,
+                        Name = "Minutes On Task",
+                        MetricValue = 873.0,
+                        StartedAtTime = Instant.FromUtc(2019, 08, 15, 10, 15, 00),
+                        EndedAtTime = Instant.FromUtc(2019, 11, 15, 10, 15, 00),
+                        HideCaliperContext = true
+                    },
+                    new AggregateMeasure("urn:uuid:c3ba4c01-1f17-46e0-85dd-1e366e6ebb81")
+                    {
+                        Metric = MetricUnitType.UnitsCompleted,
+                        Name = "Units Completed",
+                        MetricValue = 12.0,
+                        MaxMetricValue = 25.0,
+                        StartedAtTime = Instant.FromUtc(2019, 08, 15, 10, 15, 00),
+                        EndedAtTime = Instant.FromUtc(2019, 11, 15, 10, 15, 00),
+                        HideCaliperContext = true
+                    }
+                }
+            };
+
+            JsonAssertions.AssertSameObjectJson(aggregateMeasureCollection, "caliperEntityAggregateMeasureCollection");
+        }
+
+        [Test]
+        public void EntityComment_MatchesReferenceJson()
+        {
+            var entity = new FeedbackComment("https://example.edu/terms/201801/courses/7/sections/1/assess/1/items/6/users/665544/responses/1/comment/1")
+            {
+                Commenter = new Person("https://example.edu/users/554433") { HideCaliperContext = true },
+                CommentedOn = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                Value = "I like what you did here but you need to improve on...",
+                DateCreated = CaliperTestEntities.Instant20180801060000
+            };
+
+            JsonAssertions.AssertSameObjectJson(entity, "caliperEntityComment");
+        }
+
+        [Test]
+        public void EntityDateTimeQuestion_MatchesReferenceJson()
+        {
+            var question = new DateTimeQuestion("https://example.edu/surveys/100/questionnaires/30/items/3/question")
+            {
+                QuestionPosed = "When would you be available for an exam next term?",
+                MinDateTime = Instant.FromUtc(2018, 09, 01, 06, 00, 00),
+                MinLabel = "Start of Term",
+                MaxDateTime = Instant.FromUtc(2018, 12, 30, 06, 00, 00),
+                MaxLabel = "End of Term"
+            };
+
+            JsonAssertions.AssertSameObjectJson(question, "caliperEntityDateTimeQuestion");
+        }
+
+        [Test]
+        public void EntityDateTimeResponse_MatchesReferenceJson()
+        {
+            var response = new DateTimeResponse("https://example.edu/surveys/100/questionnaires/30/items/4/users/554433/responses/4")
+            {
+                DateTimeSelected = Instant.FromUtc(2018, 12, 15, 06, 00, 00),
+                StartedAtTime = Instant.FromUtc(2018, 08, 01, 05, 55, 48),
+                EndedAtTime = Instant.FromUtc(2018, 08, 01, 06, 00, 00),
+                Duration = Period.FromMinutes(4) + Period.FromSeconds(12),
+                DateCreated = Instant.FromUtc(2018, 08, 01, 06, 00, 00)
+            };
+
+            JsonAssertions.AssertSameObjectJson(response, "caliperEntityDateTimeResponse");
+        }
+
+        [Test]
+        public void EntityLikertScale_MatchesReferenceJson()
+        {
+            var entity = new LikertScale("https://example.edu/scale/2")
+            {
+                ScalePoints = 4,
+                ItemLabels = new[] { "Strongly Disagree", "Disagree", "Agree", "Strongly Agree" },
+                ItemValues = new[] { "-2", "-1", "1", "2" }
+            };
+
+            JsonAssertions.AssertSameObjectJson(entity, "caliperEntityLikertScale");
+        }
+
+        [Test]
+        public void EntityLink_MatchesReferenceJson()
+        {
+            var link = new Link("https://example.edu/terms/201801/courses/7/sections/1/pages/1");
+            JsonAssertions.AssertSameObjectJson(link, "caliperEntityLink");
+        }
+
+        [Test]
+        public void EntityLtiLink_MatchesReferenceJson()
+        {
+            var ltiLink = new LtiLink("https://tool.com/link/123")
+            {
+                MessageType = EntityType.LtiResourceLinkRequest
+            };
+
+            JsonAssertions.AssertSameObjectJson(ltiLink, "caliperEntityLtiLink");
+        }
+
+        [Test]
+        public void EntityMultiSelectQuestion_MatchesReferenceJson()
+        {
+            var question = new MultiSelectQuestion("https://example.edu/surveys/100/questionnaires/30/items/4/question")
+            {
+                QuestionPosed = "What do you want to study today?",
+                Points = 4,
+                ItemLabels = new[] { "Calculus", "Number theory", "Combinatorics", "Algebra" },
+                ItemValues = new[] {
+                    "https://example.edu/terms/201801/courses/7/sections/1/objectives/1",
+                    "https://example.edu/terms/201801/courses/7/sections/1/objectives/2",
+                    "https://example.edu/terms/201801/courses/7/sections/1/objectives/3",
+                    "https://example.edu/terms/201801/courses/7/sections/1/objectives/4"
+                }
+            };
+
+            JsonAssertions.AssertSameObjectJson(question, "caliperEntityMultiselectQuestion");
+        }
+
+        [Test]
+        public void EntityMultiSelectResponse_MatchesReferenceJson()
+        {
+            var response = new MultiSelectResponse("https://example.edu/surveys/100/questionnaires/30/items/5/users/554433/responses/5")
+            {
+                Selections = new[]
+                {
+                    "https://example.edu/terms/201801/courses/7/sections/1/objectives/1",
+                    "https://example.edu/terms/201801/courses/7/sections/1/objectives/2"
+                },
+                StartedAtTime = Instant.FromUtc(2018, 08, 01, 05, 55, 48),
+                EndedAtTime = Instant.FromUtc(2018, 08, 01, 06, 00, 00),
+                Duration = Period.FromMinutes(4) + Period.FromSeconds(12),
+                DateCreated = Instant.FromUtc(2018, 08, 01, 06, 00, 00)
+            };
+
+            JsonAssertions.AssertSameObjectJson(response, "caliperEntityMultiselectResponse");
+        }
+
+        [Test]
+        public void EntityMultiselectScale_MatchesReferenceJson()
+        {
+            var entity = new MultiSelectScale("https://example.edu/scale/3")
+            {
+                ScalePoints = 5,
+                ItemLabels = new[] { "😁", "😀", "😐", "😕", "😞" },
+                ItemValues = new[] { "superhappy", "happy", "indifferent", "unhappy", "disappointed" },
+                IsOrderedSelection = false,
+                MinSelections = 1,
+                MaxSelections = 5,
+                DateCreated = CaliperTestEntities.Instant20180801060000
+            };
+
+            JsonAssertions.AssertSameObjectJson(entity, "caliperEntityMultiselectScale");
+        }
+
+        [Test]
+        public void EntityNumericScale_MatchesReferenceJson()
+        {
+            var entity = new NumericScale("https://example.edu/scale/4")
+            {
+                MinValue = 0.0,
+                MinLabel = "Disliked",
+                MaxValue = 10.0,
+                MaxLabel = "Liked",
+                Step = 0.5,
+                DateCreated = CaliperTestEntities.Instant20180801060000
+            };
+
+            JsonAssertions.AssertSameObjectJson(entity, "caliperEntityNumericScale", ignoreDefaultValues: false);
+        }
+
+        [Test]
+        public void EntityOpenEndedQuestion_MatchesReferenceJson()
+        {
+            var question = new OpenEndedQuestion("https://example.edu/surveys/100/questionnaires/30/items/2/question")
+            {
+                QuestionPosed = "What would you change about your course?"
+            };
+
+            JsonAssertions.AssertSameObjectJson(question, "caliperEntityOpenEndedQuestion");
+        }
+
+        [Test]
+        public void EntityOpenEndedResponse_MatchesReferenceJson()
+        {
+            var response = new OpenEndedResponse("https://example.edu/surveys/100/questionnaires/30/items/2/users/554433/responses/2")
+            {
+                Value = "I feel that ...",
+                StartedAtTime = Instant.FromUtc(2018, 08, 01, 05, 55, 48),
+                EndedAtTime = Instant.FromUtc(2018, 08, 01, 06, 00, 00),
+                Duration = Period.FromMinutes(4) + Period.FromSeconds(12),
+                DateCreated = Instant.FromUtc(2018, 08, 01, 06, 00, 00)
+            };
+
+            JsonAssertions.AssertSameObjectJson(response, "caliperEntityOpenEndedResponse");
+        }
+
+        [Test]
+        public void EntityQuery_MatchesReferenceJson()
+        {
+            var ltiLink = new Query("https://example.edu/users/554433/search?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29")
+            {
+                Creator = new Person("https://example.edu/users/554433") { HideCaliperContext = true },
+                SearchTarget = new SoftwareApplication("https://example.edu/catalog") { HideCaliperContext = true },
+                SearchTerms = "IMS AND (Caliper OR Analytics)",
+                DateCreated = CaliperTestEntities.Instant20181115100500
+            };
+
+            JsonAssertions.AssertSameObjectJson(ltiLink, "caliperEntityQuery");
+        }
+
+        [Test]
+        public void EntityQuestion_MatchesReferenceJson()
+        {
+            var entity = new Question("https://example.edu/question/1")
+            {
+                QuestionPosed = "How would you rate this?"
+            };
+
+            JsonAssertions.AssertSameObjectJson(entity, "caliperEntityQuestion");
+        }
+
+        [Test]
+        public void EntityQuestionnaireItem_MatchesReferenceJson()
+        {
+            var questionnaireItem = new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/1")
+            {
+                Question = new RatingScaleQuestion("https://example.edu/surveys/100/questionnaires/30/items/1/question")
+                {
+                    QuestionPosed = "How satisfied are you with our services?",
+                    Scale = new LikertScale("https://example.edu/scale/2")
+                    {
+                        ScalePoints = 4,
+                        ItemLabels = new[] { "Strongly Disagree", "Disagree", "Agree", "Strongly Agree" },
+                        ItemValues = new[] { "-2", "-1", "1", "2" },
+                        HideCaliperContext = true
+                    },
+                    HideCaliperContext = true
+                },
+                Categories = new[] { "teaching effectiveness", "Course structure" },
+                Weight = 1.0
+            };
+
+            JsonAssertions.AssertSameObjectJson(questionnaireItem, "caliperEntityQuestionnaireItem");
+        }
+
+        [Test]
+        public void EntityQuestionnaire_MatchesReferenceJson()
+        {
+            var questionnaire = new Questionnaire("https://example.edu/surveys/100/questionnaires/30")
+            {
+                Items = new[]
+                {
+                    new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/1"){ HideCaliperContext = true },
+                    new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/2"){ HideCaliperContext = true }
+                },
+                DateCreated = CaliperTestEntities.Instant20180801060000
+            };
+
+            JsonAssertions.AssertSameObjectJson(questionnaire, "caliperEntityQuestionnaire");
+        }
+
+        [Test]
+        public void EntityRatingScaleResponse_MatchesReferenceJson()
+        {
+            var response = new RatingScaleResponse("https://example.edu/surveys/100/questionnaires/30/items/1/users/554433/responses/1")
+            {
+                Selections = new[] { "Satisfied" },
+                StartedAtTime = Instant.FromUtc(2018, 08, 01, 05, 55, 48),
+                EndedAtTime = Instant.FromUtc(2018, 08, 01, 06, 00, 00),
+                Duration = Period.FromMinutes(4) + Period.FromSeconds(12),
+                DateCreated = Instant.FromUtc(2018, 08, 01, 06, 00, 00)
+            };
+
+            JsonAssertions.AssertSameObjectJson(response, "caliperEntityRatingScaleResponse");
+        }
+
+        [Test]
+        public void EntityRatingWithLikertScale_MatchesReferenceJson()
+        {
+            var rating = new FeedbackRating("https://example.edu/users/554433/rating/1")
+            {
+                Rater = CaliperTestEntities.Person554433(),
+                Rated = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                Question = new RatingScaleQuestion("https://example.edu/question/2")
+                {
+                    QuestionPosed = "Do you agree with the opinion presented?",
+                    Scale = new LikertScale("https://example.edu/scale/2")
+                    {
+                        ScalePoints = 4,
+                        ItemLabels = new[] { "Strongly Disagree", "Disagree", "Agree", "Strongly Agree" },
+                        ItemValues = new[] { "-2", "-1", "1", "2" },
+                        HideCaliperContext = true
+                    },
+                    HideCaliperContext = true
+                },
+                Selections = new string[] { "1" },
+                RatingComment = new FeedbackComment("https://example.edu/terms/201801/courses/7/sections/1/assess/1/items/6/users/665544/responses/1/comment/1")
+                {
+                    Commenter = CaliperTestEntities.Person554433(),
+                    CommentedOn = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                    {
+                        Name = "Course Syllabus",
+                        MediaType = "application/pdf",
+                        IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                        {
+                            Name = "Course Assets",
+                            IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                            HideCaliperContext = true
+                        },
+                        DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                        HideCaliperContext = true
+                    },
+                    Value = "I like what you did here but you need to improve on...",
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                DateCreated = CaliperTestEntities.Instant20180801060000,
+            };
+
+            JsonAssertions.AssertSameObjectJson(rating, "caliperEntityRatingWithLikertScale");
+        }
+
+        [Test]
+        public void EntityRatingWithMultiselectScale_MatchesReferenceJson()
+        {
+            var rating = new FeedbackRating("https://example.edu/users/554433/rating/2")
+            {
+                Rater = CaliperTestEntities.Person554433(),
+                Rated = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                {
+                    Name = "Course Assets",
+                    IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                    HideCaliperContext = true
+                },
+                Question = new RatingScaleQuestion("https://example.edu/question/3")
+                {
+                    QuestionPosed = "How do you feel about this content? (select one or more)",
+                    Scale = new MultiSelectScale("https://example.edu/scale/3")
+                    {
+                        ScalePoints = 5,
+                        ItemLabels = new[] { "😁", "😀", "😐", "😕", "😞" },
+                        ItemValues = new[] { "superhappy", "happy", "indifferent", "unhappy", "disappointed" },
+                        IsOrderedSelection = false,
+                        MinSelections = 1,
+                        MaxSelections = 5,
+                        HideCaliperContext = true
+                    },
+                    HideCaliperContext = true
+                },
+                Selections = new string[] { "superhappy", "disappointed" },
+                DateCreated = CaliperTestEntities.Instant20180801060000,
+            };
+
+            JsonAssertions.AssertSameObjectJson(rating, "caliperEntityRatingWithMultiselectScale");
+        }
+
+        [Test]
+        public void EntityScale_MatchesReferenceJson()
+        {
+            var entity = new Scale("https://example.edu/scale/1")
+            {
+                DateCreated = CaliperTestEntities.Instant20180801060000
+            };
+
+            JsonAssertions.AssertSameObjectJson(entity, "caliperEntityScale");
+        }
+
+        [Test]
+        public void EntitySearchResponse_MatchesReferenceJson()
+        {
+
+            var entity = new SearchResponse("https://example.edu/users/554433/response?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29")
+            {
+                SearchProvider = new SoftwareApplication("https://example.edu") { HideCaliperContext = true },
+                SearchTarget = new SoftwareApplication("https://example.edu/catalog") { HideCaliperContext = true },
+                Query = new Query("https://example.edu/users/554433/search?query=IMS%20AND%20%28Caliper%20OR%20Analytics%29")
+                {
+                    Creator = CaliperTestEntities.Person554433(),
+                    SearchTarget = new SoftwareApplication("https://example.edu/catalog") { HideCaliperContext = true },
+                    SearchTerms = "IMS AND (Caliper OR Analytics)",
+                    DateCreated = CaliperTestEntities.Instant20181115100500,
+                    HideCaliperContext = true
+                },
+                SearchResultsItemCount = 3,
+                DateCreated = CaliperTestEntities.Instant20181115100500
+            };
+
+            var coerced = JsonAssertions.coerce(entity,
+                new string[] { "..query.searchTarget" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEntitySearchResponse");
+        }
+
+        [Test]
+        public void EntitySurvey_MatchesReferenceJson()
+        {
+            var survey = new Survey("https://example.edu/collections/1")
+            {
+                Items = new Questionnaire[]
+                {
+                    new Questionnaire("https://example.edu/surveys/100/questionnaires/30")
+                    {
+                        Items = new [] {
+                            new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/1"){ HideCaliperContext = true },
+                            new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/2"){ HideCaliperContext = true }
+                        },
+                        DateCreated = CaliperTestEntities.Instant20180801060000,
+                        HideCaliperContext = true
+                    },
+                     new Questionnaire("https://example.edu/surveys/100/questionnaires/31")
+                     {
+                        Items = new [] {
+                            new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/31/items/1"){ HideCaliperContext = true },
+                            new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/31/items/2"){ HideCaliperContext = true }
+                        },
+                        DateCreated = CaliperTestEntities.Instant20180801060000,
+                        HideCaliperContext = true
+                     },
+                },
+            };
+
+            JsonAssertions.AssertSameObjectJson(survey, "caliperEntitySurvey");
+        }
+
+        [Test]
+        public void EntitySurveyInvitation_MatchesReferenceJson()
+        {
+            var surveyInvitation = new SurveyInvitation("https://example.edu/surveys/100/invitations/users/112233")
+            {
+                SentCount = 1,
+                DateSent = CaliperTestEntities.Instant20181115100500,
+                Rater = CaliperTestEntities.Person554433(),
+                Survey = new Survey("https://example.edu/survey/1") { HideCaliperContext = true },
+                DateCreated = CaliperTestEntities.Instant20180801060000,
+            };
+
+            JsonAssertions.AssertSameObjectJson(surveyInvitation, "caliperEntitySurveyInvitation");
+        }
+
+        [Test]
+        public void EntityTextPositionSelector_MatchesReferenceJson()
+        {
+            var selector = new TextPositionSelector()
+            {
+                Start = 2300,
+                End = 2370
+            };
+
+            JsonAssertions.AssertSameObjectJson(selector, "caliperEntityTextPositionSelector");
+        }
+
+        [Test]
+        public void EventFeedbackCommented_MatchesReferenceJson()
+        {
+            var comment = new FeedbackComment("https://example.edu/terms/201801/courses/7/sections/1/assess/1/items/6/users/665544/responses/1/comment/1")
+            {
+                Commenter = CaliperTestEntities.Person554433(),
+                CommentedOn = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                Value = "I like what you did here but you need to improve on...",
+                DateCreated = CaliperTestEntities.Instant20180801060000,
+                HideCaliperContext = true
+            };
+
+            var feedbackEvent = new FeedbackEvent("urn:uuid:0c81f804-62ee-4953-81c5-62d9579c4369", comment)
+            {
+                Profile = ProfileType.Feedback,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20181115100500,
+                EdApp = CaliperTestEntities.SoftwareAppV2(),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    StartedAt = CaliperTestEntities.Instant20181115100000,
+                    HideCaliperContext = true
+                }
+            };
+
+            var coerced = JsonAssertions.coerce(feedbackEvent, new[] { "..membership.member", "..membership.organization", "..edApp" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventFeedbackCommented");
+        }
+
+        [Test]
+        public void EventFeedbackRanked_MatchesReferenceJson()
+        {
+            var rating = new FeedbackRating("https://example.edu/users/554433/rating/1")
+            {
+                Rater = CaliperTestEntities.Person554433(),
+                Rated = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                Question = new RatingScaleQuestion("https://example.edu/question/2")
+                {
+                    QuestionPosed = "Do you agree with the opinion presented?",
+                    Scale = new LikertScale("https://example.edu/scale/2")
+                    {
+                        ScalePoints = 4,
+                        ItemLabels = new[] { "Strongly Disagree", "Disagree", "Agree", "Strongly Agree" },
+                        ItemValues = new[] { "-2", "-1", "1", "2" },
+                        HideCaliperContext = true
+                    },
+                    HideCaliperContext = true
+                },
+                Selections = new string[] { "1" },
+                RatingComment = new FeedbackComment("https://example.edu/terms/201801/courses/7/sections/1/assess/1/items/6/users/665544/responses/1/comment/1")
+                {
+                    Commenter = CaliperTestEntities.Person554433(),
+                    CommentedOn = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                    {
+                        Name = "Course Syllabus",
+                        MediaType = "application/pdf",
+                        IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                        {
+                            Name = "Course Assets",
+                            IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                            HideCaliperContext = true
+                        },
+                        DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                        HideCaliperContext = true
+                    },
+                    Value = "I like what you did here but you need to improve on...",
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                DateCreated = CaliperTestEntities.Instant20180801060000,
+                HideCaliperContext = true
+            };
+
+            var feedbackEvent = new FeedbackEvent("urn:uuid:a502e4fc-24c1-11e9-ab14-d663bd873d93", rating)
+            {
+                Profile = ProfileType.Feedback,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20181115100500,
+                EdApp = CaliperTestEntities.SoftwareAppV2(),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    StartedAt = CaliperTestEntities.Instant20181115100000,
+                    HideCaliperContext = true
+                }
+            };
+
+            var coerced = JsonAssertions.coerce(feedbackEvent, new[] { "..membership.member", "..membership.organization", "..edApp" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventFeedbackRanked");
+        }
+
+        [Test]
+        public void EventNavigationNavigatedToQuestionnaireItem_MatchesReferenceJson()
+        {
+            var navigationEvent = new NavigationEvent(
+                "urn:uuid:a9ea1cb9-3445-4f5a-b5e5-44630cc054a9")
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/2")
+                {
+                    Question = new OpenEndedQuestion("https://example.edu/surveys/100/questionnaires/30/items/2/question")
+                    {
+                        QuestionPosed = "What would you change about your course?",
+                        HideCaliperContext = true
+                    },
+                    Categories = new[] { "teaching effectiveness", "Course structure" },
+                    Weight = 1.0,
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 12, 10, 15, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/f095bbd391ea4a5dd639724a40b606e98a631823")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 12, 10, 00, 00)
+                }
+            };
+            navigationEvent.EdApp.HideCaliperContext = true;
+            (navigationEvent.Group as CourseSection).HideCaliperContext = true;
+            navigationEvent.Membership.HideCaliperContext = true;
+            navigationEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(navigationEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventNavigationNavigatedToQuestionnaireItem", false);
+        }
+
+        [Test]
+        public void EventNavigationNavigatedToWebPage_MatchesReferenceJson()
+        {
+            var navigationEvent = new NavigationEvent(
+                "urn:uuid:ff9ec22a-fc59-4ae1-ae8d-2c9463ee2f8f")
+            {
+                Profile = ProfileType.Reading,
+                Actor = CaliperTestEntities.Person554433(),
+                Action = Action.NavigatedTo,
+                Object = new WebPage("https://example.edu/terms/201601/courses/7/sections/1/pages/2")
+                {
+                    Name = "Learning Analytics Specifications",
+                    Description = "Overview of Learning Analytics Specifications with particular emphasis on IMS Caliper.",
+                    DateCreated = CaliperTestEntities.Instant20160801090000,
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20161115101500,
+                Referrer = new WebPage("https://example.edu/terms/201601/courses/7/sections/1/pages/1") { HideCaliperContext = true },
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall16(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner(),
+                Session = CaliperTestEntities.Session6259edu()
+            };
+            navigationEvent.EdApp.HideCaliperContext = true;
+            (navigationEvent.Group as CourseSection).HideCaliperContext = true;
+            navigationEvent.Membership.HideCaliperContext = true;
+            navigationEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(navigationEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventNavigationNavigatedToWebPage", false);
+        }
+
+        [Test]
+        public void EventNavigationNavigatedToWebPageThinned_MatchesReferenceJson()
+        {
+            var navigationEvent = new NavigationEvent(
+                "urn:uuid:71657137-8e6e-44f8-8499-e1c3df6810d2")
+            {
+                Profile = ProfileType.Reading,
+                Actor = CaliperTestEntities.Person554433(),
+                Action = Action.NavigatedTo,
+                Object = new WebPage("https://example.edu/terms/201601/courses/7/sections/1/pages/2") { HideCaliperContext = true },
+                EventTime = CaliperTestEntities.Instant20161115101500,
+                Referrer = new WebPage("https://example.edu/terms/201601/courses/7/sections/1/pages/1") { HideCaliperContext = true },
+                EdApp = new SoftwareApplication("https://example.edu") { HideCaliperContext = true },
+                Group = new CourseSection("https://example.edu/terms/201601/courses/7/sections/1") { HideCaliperContext = true },
+                Membership = new Membership("https://example.edu/terms/201601/courses/7/sections/1/rosters/1") { HideCaliperContext = true },
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259") { HideCaliperContext = true }
+            };
+            navigationEvent.EdApp.HideCaliperContext = true;
+            (navigationEvent.Group as CourseSection).HideCaliperContext = true;
+            navigationEvent.Membership.HideCaliperContext = true;
+            navigationEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(navigationEvent,
+                new string[] { "..actor", "..object", "..referrer", "..edApp", "..group", "..membership", "..session" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventNavigationNavigatedToWebPageThinned", false);
+        }
+
+        [Test]
+        public void EventQuestionnaireItemCompletedOpenEndedQuestion_MatchesReferenceJson()
+        {
+            var questionnaireItemEvent = new QuestionnaireItemEvent(
+                "urn:uuid:590f1ff2-3c6d-11e9-b210-d663bd873d93", Action.Completed)
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/2")
+                {
+                    Question = new OpenEndedQuestion("https://example.edu/surveys/100/questionnaires/30/items/2/question")
+                    {
+                        QuestionPosed = "What would you change about your course?",
+                        HideCaliperContext = true
+                    },
+                    Categories = new[] { "teaching effectiveness", "Course structure" },
+                    Weight = 1.0,
+                    HideCaliperContext = true
+                },
+                Generated = new OpenEndedResponse("https://example.edu/surveys/100/questionnaires/30/items/2/users/554433/responses/2")
+                {
+                    Value = "I feel that ...",
+                    StartedAtTime = Instant.FromUtc(2018, 08, 01, 05, 55, 48),
+                    EndedAtTime = Instant.FromUtc(2018, 08, 01, 06, 00, 00),
+                    Duration = Period.FromMinutes(4) + Period.FromSeconds(12),
+                    DateCreated = Instant.FromUtc(2018, 08, 01, 06, 00, 00),
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 12, 10, 15, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/f095bbd391ea4a5dd639724a40b606e98a631823")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 12, 10, 00, 00)
+                }
+            };
+            questionnaireItemEvent.EdApp.HideCaliperContext = true;
+            (questionnaireItemEvent.Group as CourseSection).HideCaliperContext = true;
+            questionnaireItemEvent.Membership.HideCaliperContext = true;
+            questionnaireItemEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(questionnaireItemEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventQuestionnaireItemCompletedOpenEndedQuestion", false);
+        }
+
+        [Test]
+        public void EventQuestionnaireItemCompletedRatingScaleQuestion_MatchesReferenceJson()
+        {
+            var questionnaireItemEvent = new QuestionnaireItemEvent(
+                "urn:uuid:590f1ff2-3c6d-11e9-b210-d663bd873d93", Action.Completed)
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/1")
+                {
+                    Question = new RatingScaleQuestion("https://example.edu/surveys/100/questionnaires/30/items/1/question")
+                    {
+                        QuestionPosed = "How satisfied are you with our services?",
+                        Scale = new LikertScale("https://example.edu/scale/2")
+                        {
+                            ScalePoints = 4,
+                            ItemLabels = new[] { "Strongly Disagree", "Disagree", "Agree", "Strongly Agree" },
+                            ItemValues = new[] { "-2", "-1", "1", "2" },
+                            HideCaliperContext = true
+                        },
+                        HideCaliperContext = true
+                    },
+                    Categories = new[] { "teaching effectiveness", "Course structure" },
+                    Weight = 1.0,
+                    HideCaliperContext = true
+                },
+                Generated = new RatingScaleResponse("https://example.edu/surveys/100/questionnaires/30/items/1/users/554433/responses/1")
+                {
+                    Selections = new[] { "Satisfied" },
+                    StartedAtTime = Instant.FromUtc(2018, 08, 01, 05, 55, 48),
+                    EndedAtTime = Instant.FromUtc(2018, 08, 01, 06, 00, 00),
+                    Duration = Period.FromMinutes(4) + Period.FromSeconds(12),
+                    DateCreated = Instant.FromUtc(2018, 08, 01, 06, 00, 00),
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 12, 10, 15, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/f095bbd391ea4a5dd639724a40b606e98a631823")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 12, 10, 00, 00)
+                }
+            };
+            questionnaireItemEvent.EdApp.HideCaliperContext = true;
+            (questionnaireItemEvent.Group as CourseSection).HideCaliperContext = true;
+            questionnaireItemEvent.Membership.HideCaliperContext = true;
+            questionnaireItemEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(questionnaireItemEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventQuestionnaireItemCompletedRatingScaleQuestion", false);
+        }
+
+        [Test]
+        public void EventQuestionnaireItemStarted_MatchesReferenceJson()
+        {
+            var questionnaireItemEvent = new QuestionnaireItemEvent(
+                "urn:uuid:23995ed4-3c6b-11e9-b210-d663bd873d93", Action.Started)
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/1")
+                {
+                    Question = new RatingScaleQuestion("https://example.edu/surveys/100/questionnaires/30/items/1/question")
+                    {
+                        QuestionPosed = "How satisfied are you with our services?",
+                        Scale = new LikertScale("https://example.edu/scale/2")
+                        {
+                            ScalePoints = 4,
+                            ItemLabels = new[] { "Strongly Disagree", "Disagree", "Agree", "Strongly Agree" },
+                            ItemValues = new[] { "-2", "-1", "1", "2" },
+                            HideCaliperContext = true
+                        },
+                        HideCaliperContext = true
+                    },
+                    Categories = new[] { "teaching effectiveness", "Course structure" },
+                    Weight = 1.0,
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 12, 10, 15, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/f095bbd391ea4a5dd639724a40b606e98a631823")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 12, 10, 00, 00)
+                }
+            };
+            questionnaireItemEvent.EdApp.HideCaliperContext = true;
+            (questionnaireItemEvent.Group as CourseSection).HideCaliperContext = true;
+            questionnaireItemEvent.Membership.HideCaliperContext = true;
+            questionnaireItemEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(questionnaireItemEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventQuestionnaireItemStarted", false);
+        }
+
+        [Test]
+        public void EventQuestionnaireStarted_MatchesReferenceJson()
+        {
+            var questionnaireEvent = new QuestionnaireEvent(
+                "urn:uuid:23995ed4-3c6b-11e9-b210-d663bd873d93", Action.Started)
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new Questionnaire("https://example.edu/surveys/100/questionnaires/30")
+                {
+                    Items = new[]
+                    {
+                        new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/1") { HideCaliperContext = true },
+                        new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/2") { HideCaliperContext = true }
+                    },
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 12, 10, 15, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/f095bbd391ea4a5dd639724a40b606e98a631823")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 12, 10, 00, 00)
+                }
+            };
+            questionnaireEvent.EdApp.HideCaliperContext = true;
+            (questionnaireEvent.Group as CourseSection).HideCaliperContext = true;
+            questionnaireEvent.Membership.HideCaliperContext = true;
+            questionnaireEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(questionnaireEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventQuestionnaireStarted", false);
+        }
+
+        [Test]
+        public void EventQuestionnaireSubmitted_MatchesReferenceJson()
+        {
+            var questionnaireEvent = new QuestionnaireEvent(
+                "urn:uuid:79f18ac2-3c6b-11e9-b210-d663bd873d93", Action.Submitted)
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new Questionnaire("https://example.edu/surveys/100/questionnaires/30")
+                {
+                    Items = new[]
+                    {
+                        new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/1") { HideCaliperContext = true },
+                        new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/2") { HideCaliperContext = true }
+                    },
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 12, 10, 15, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/f095bbd391ea4a5dd639724a40b606e98a631823")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 12, 10, 00, 00)
+                }
+            };
+            questionnaireEvent.EdApp.HideCaliperContext = true;
+            (questionnaireEvent.Group as CourseSection).HideCaliperContext = true;
+            questionnaireEvent.Membership.HideCaliperContext = true;
+            questionnaireEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(questionnaireEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventQuestionnaireSubmitted", false);
+        }
+
+        [Test]
+        public void EventResourceManagementCopied_MatchesReferenceJson()
+        {
+            var resourceManagement = new ResourceManagementEvent("urn:uuid:d3543a73-e307-4190-a755-5ce7b3187bc5", Action.Copied)
+            {
+                Profile = ProfileType.ResourceManagement,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    Creators = new[] { new Person("https://example.edu/users/554433") { HideCaliperContext = true } },
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                Generated = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus_copy.pdf")
+                {
+                    Name = "Course Syllabus (copy)",
+                    MediaType = "application/pdf",
+                    Creators = new[] { new Person("https://example.edu/users/554433") { HideCaliperContext = true } },
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = CaliperTestEntities.Instant20181115100500,
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20181115100500,
+                EdApp = CaliperTestEntities.SoftwareAppV2(),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = new Membership("https://example.edu/terms/201801/courses/7/sections/1/rosters/1")
+                {
+                    Member = new Person("https://example.edu/users/554433"),
+                    Organization = new Organization("https://example.edu/terms/201801/courses/7/sections/1"),
+                    Roles = new[] { Role.Instructor },
+                    Status = Status.Active,
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    StartedAt = CaliperTestEntities.Instant20181115100000,
+                    HideCaliperContext = true
+                }
+            };
+
+            var coerced = JsonAssertions.coerce(resourceManagement, new[] { "..membership.member", "..membership.organization", "..edApp" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventResourceManagementCopied");
+        }
+
+        [Test]
+        public void EventResourceManagementCreated_MatchesReferenceJson()
+        {
+            var resourceManagement = new ResourceManagementEvent("urn:uuid:0c81f804-62ee-4953-81c5-62d9579c4369", Action.Created)
+            {
+                Profile = ProfileType.ResourceManagement,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    Creators = new[] { new Person("https://example.edu/users/554433") { HideCaliperContext = true } },
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20181115100500,
+                EdApp = CaliperTestEntities.SoftwareAppV2(),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = new Membership("https://example.edu/terms/201801/courses/7/sections/1/rosters/1")
+                {
+                    Member = new Person("https://example.edu/users/554433"),
+                    Organization = new Organization("https://example.edu/terms/201801/courses/7/sections/1"),
+                    Roles = new[] { Role.Instructor },
+                    Status = Status.Active,
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    StartedAt = CaliperTestEntities.Instant20181115100000,
+                    HideCaliperContext = true
+                }
+            };
+
+            var coerced = JsonAssertions.coerce(resourceManagement, new[] { "..membership.member", "..membership.organization", "..edApp" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventResourceManagementCreated");
+        }
+
+        [Test]
+        public void EventResourceManagementPrinted_MatchesReferenceJson()
+        {
+            var resourceManagement = new ResourceManagementEvent("urn:uuid:d3543a73-e307-4190-a755-5ce7b3187bc5", Action.Printed)
+            {
+                Profile = ProfileType.ResourceManagement,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new DigitalResource("https://example.edu/terms/201801/courses/7/sections/1/resources/1/syllabus.pdf")
+                {
+                    Name = "Course Syllabus",
+                    MediaType = "application/pdf",
+                    Creators = new[] { new Person("https://example.edu/users/554433") { HideCaliperContext = true } },
+                    IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201801/courses/7/sections/1/resources/1")
+                    {
+                        Name = "Course Assets",
+                        IsPartOf = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    DateCreated = Instant.FromUtc(2018, 08, 02, 11, 32, 00),
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20181115100500,
+                EdApp = CaliperTestEntities.SoftwareAppV2(),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = new Membership("https://example.edu/terms/201801/courses/7/sections/1/rosters/1")
+                {
+                    Member = new Person("https://example.edu/users/554433"),
+                    Organization = new Organization("https://example.edu/terms/201801/courses/7/sections/1"),
+                    Roles = new[] { Role.Instructor },
+                    Status = Status.Active,
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    StartedAt = CaliperTestEntities.Instant20181115100000,
+                    HideCaliperContext = true
+                }
+            };
+
+            var coerced = JsonAssertions.coerce(resourceManagement, new[] { "..membership.member", "..membership.organization", "..edApp" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventResourceManagementPrinted");
+        }
+
+        [Test]
+        public void EventSearchSearched_MatchesReferenceJson()
+        {
+            var searchEvent = new SearchEvent(
+                "urn:uuid:cb3878ed-8240-4c6d-9fee-77221810f5e4", Action.Searched)
+            {
+                Profile = ProfileType.Search,
+                Actor = new Person("https://example.edu/users/554433") { HideCaliperContext = true },
+                Object = CaliperTestEntities.CatalogApp(),
+                EventTime = CaliperTestEntities.Instant20181115100500,
+                Generated = CaliperTestEntities.SearchIMSCaliperAnalytics(),
+                EdApp = CaliperTestEntities.SoftwareAppV2(),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = CaliperTestEntities.Session6259_2018()
+            };
+
+            var coerced = JsonAssertions.coerce(searchEvent,
+                new string[] { "..edApp", "..searchProvider", "..searchTarget", "..query.creator", "..query.searchTarget", "..generated.searchResults", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventSearchSearched");
+        }
+
+        [Test]
+        public void EndpointConfigPayload_MatchesReferenceJson()
+        {
+            var supportVersions = new CaliperContextCollection();
+            supportVersions.Add(new CaliperContext("http://purl.imsglobal.org/ctx/caliper/v1p1"));
+            supportVersions.Add(new CaliperContext("http://purl.imsglobal.org/ctx/caliper/v1p1/ToolLaunchProfile-extension"));
+            supportVersions.Add(CaliperContext.Context);
+
+            var endpointConfigPayload = new CaliperEndpointConfigPayload()
+            {
+                MaxPayloadSize = 512,
+                SupportedExtensions = new CaliperEndpoint()
+                {
+                    Name = "Example Endpoint",
+                    Version = "1.3.0"
+                },
+                SupportedVersions = supportVersions
+            };
+
+            JsonAssertions.AssertSameObjectJson(endpointConfigPayload, "caliperEndpointConfigPayload");
+        }
+
+        [Test]
+        public void EntityRatingScaleQuestion_MatchesReferenceJson()
+        {
+            var ratingScaleQuestion = new RatingScaleQuestion("https://example.edu/question/2")
+            {
+                QuestionPosed = "Do you agree with the opinion presented?",
+                Scale = new LikertScale("https://example.edu/scale/2")
+                {
+                    ScalePoints = 4,
+                    ItemLabels = new[] { "Strongly Disagree", "Disagree", "Agree", "Strongly Agree" },
+                    ItemValues = new[] { "-2", "-1", "1", "2" },
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                }
+            };
+
+            JsonAssertions.AssertSameObjectJson(ratingScaleQuestion, "caliperEntityRatingScaleQuestion");
+        }
+
+        [Test]
+        public void EntitySessionClient_MatchesReferenceJson()
+        {
+            var sessionClient = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+            {
+                User = CaliperTestEntities.Person554433(),
+                Client = new SoftwareApplication("urn:uuid:d71016dc-ed2f-46f9-ac2c-b93f15f38fdc")
+                {
+                    Host = "https://example.edu",
+                    UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36",
+                    IpAddress = "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
+                },
+                StartedAt = Instant.FromUtc(2018, 09, 15, 10, 00, 00)
+            };
+
+            JsonAssertions.AssertSameObjectJson(sessionClient, "caliperEntitySessionClient");
+        }
+
+        [Test]
+        public void EventForumSubscribedThinned_MatchesReferenceJson()
+        {
+            var forumEvent = new ForumEvent("urn:uuid:a2f41f9c-d57d-4400-b3fe-716b9026334e", Action.Subscribed)
+            {
+                Profile = ProfileType.Forum,
+                Actor = new Person("https://example.edu/users/554433"),
+                Object = new Forum("https://example.edu/terms/201801/courses/7/sections/1/forums/1"),
+                EventTime = Instant.FromUtc(2018, 11, 15, 10, 16, 00),
+                EdApp = new SoftwareApplication("https://example.edu/forums"),
+                Group = new CourseSection("https://example.edu/terms/201801/courses/7/sections/1"),
+                Membership = new Membership("https://example.edu/terms/201801/courses/7/sections/1/rosters/1"),
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+            };
+
+            var coerced = JsonAssertions.coerce(forumEvent,
+                new string[] { "..actor", "..object", "..edApp", "..group", "..membership", "..session" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventForumSubscribedThinned");
+        }
+
+        [Test]
+        public void EntitySystemIdentifier_MatchesReferenceJson()
+        {
+            var identifier = new SystemIdentifier()
+            {
+                Identifier = "https://example.edu/users/554433",
+                IdentifierType = "LtiUserId",
+                Source = new SoftwareApplication("https://example.edu")
+            };
+
+            JsonAssertions.AssertSameObjectJson(identifier, "caliperEntitySystemIdentifier");
+        }
+
+        [Test]
+        public void EventNavigationNavigatedToCollectionItem_MatchesReferenceJson()
+        {
+            var navigationEvent = new NavigationEvent(
+                "urn:uuid:ff9ec22a-fc59-4ae1-ae8d-2c9463ee2f8f")
+            {
+                Profile = ProfileType.Media,
+                Actor = CaliperTestEntities.Person554433(),
+                Action = Action.NavigatedTo,
+                Object = new DigitalResourceCollection("https://example.edu/terms/201601/courses/7/sections/1/resources/2")
+                {
+                    Name = "Video Collection",
+                    Keywords = new[] { "collection", "videos" },
+                    DateCreated = CaliperTestEntities.Instant20160801060000,
+                    DateModified = CaliperTestEntities.Instant20160902113000,
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20161115101500,
+                Referrer = new VideoObject("https://example.edu/videos/1225")
+                {
+                    MediaType = "video/ogg",
+                    Name = "Introduction to IMS Caliper",
+                    StorageName = "caliper-intro.ogg",
+                    DateCreated = CaliperTestEntities.Instant20160801060000,
+                    Duration = Period.FromHours(1) + Period.FromMinutes(12) + Period.FromSeconds(27),
+                    Version = "1.1",
+                    HideCaliperContext = true
+                },
+                Target = new VideoObject("https://example.edu/videos/5629")
+                {
+                    MediaType = "video/ogg",
+                    Name = "IMS Caliper Activity Profiles",
+                    StorageName = "caliper-activity-profiles.ogg",
+                    DateCreated = CaliperTestEntities.Instant20160801060000,
+                    Duration = Period.FromMinutes(55) + Period.FromSeconds(13),
+                    Version = "1.1.1",
+                    HideCaliperContext = true
+                },
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall16(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner(),
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    StartedAt = CaliperTestEntities.Instant20161115100000,
+                    HideCaliperContext = true
+                }
+            };
+            navigationEvent.EdApp.HideCaliperContext = true;
+            (navigationEvent.Group as CourseSection).HideCaliperContext = true;
+            navigationEvent.Membership.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(navigationEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventNavigationNavigatedToCollectionItem", false);
+        }
+
+        [Test]
+        public void EventSurveyInvitationAccepted_MatchesReferenceJson()
+        {
+            var surveyEvent = new SurveyInvitationEvent(
+                "urn:uuid:534afa10-3564-11e9-b210-d663bd873d93", Action.Accepted)
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new SurveyInvitation("https://example.edu/surveys/100/invitations/users/112233")
+                {
+                    SentCount = 1,
+                    DateSent = CaliperTestEntities.Instant20181115100500,
+                    Rater = CaliperTestEntities.Person112233(),
+                    Survey = new Survey("https://example.edu/survey/1") { HideCaliperContext = true },
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 15, 10, 05, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 15, 10, 00, 00)
+                }
+            };
+            surveyEvent.EdApp.HideCaliperContext = true;
+            (surveyEvent.Object as SurveyInvitation).Rater.HideCaliperContext = true;
+            (surveyEvent.Group as CourseSection).HideCaliperContext = true;
+            surveyEvent.Membership.HideCaliperContext = true;
+            surveyEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(surveyEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventSurveyInvitationAccepted", false);
+        }
+
+        [Test]
+        public void EventSurveyInvitationSent_MatchesReferenceJson()
+        {
+            var surveyEvent = new SurveyInvitationEvent(
+                "urn:uuid:5801f73e-3564-11e9-b210-d663bd873d93", Action.Sent)
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person112233(),
+                Object = new SurveyInvitation("https://example.edu/surveys/100/invitations/users/554433")
+                {
+                    SentCount = 1,
+                    DateSent = CaliperTestEntities.Instant20181115100500,
+                    Rater = CaliperTestEntities.Person554433(),
+                    Survey = new Survey("https://example.edu/survey/1") { HideCaliperContext = true },
+                    DateCreated = CaliperTestEntities.Instant20180801060000,
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 12, 10, 15, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership112233Instructor_2018(),
+                Session = new Session("https://example.edu/sessions/f095bbd391ea4a5dd639724a40b606e98a631823")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 12, 10, 00, 00)
+                }
+            };
+
+            (surveyEvent.Actor as Person).HideCaliperContext = true;
+            surveyEvent.EdApp.HideCaliperContext = true;
+            (surveyEvent.Group as CourseSection).HideCaliperContext = true;
+            surveyEvent.Membership.HideCaliperContext = true;
+            surveyEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(surveyEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventSurveyInvitationSent", false);
+        }
+
+        [Test]
+        public void EventSurveyOptedIn_MatchesReferenceJson()
+        {
+            var surveyEvent = new SurveyEvent(
+                "urn:uuid:4bfb7726-3564-11e9-b210-d663bd873d93", Action.OptedIn)
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Object = new Survey("https://example.edu/survey/1") { HideCaliperContext = true },
+                EventTime = CaliperTestEntities.Instant20181115100500,
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    StartedAt = CaliperTestEntities.Instant20181115100000
+                }
+            };
+
+            surveyEvent.EdApp.HideCaliperContext = true;
+            (surveyEvent.Group as CourseSection).HideCaliperContext = true;
+            surveyEvent.Membership.HideCaliperContext = true;
+            surveyEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(surveyEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventSurveyOptedIn", false);
+        }
+
+        [Test]
+        public void EventToolUseUsedWithProgress_MatchesReferenceJson()
+        {
+            var person = new Person("https://example.edu/users/554433") { HideCaliperContext = true };
+
+            var toolUseEvent = new ToolUseEvent("urn:uuid:7e10e4f3-a0d8-4430-95bd-783ffae4d916", Action.Used)
+            {
+                Profile = ProfileType.ToolUse,
+                Actor = person,
+                Action = Action.Used,
+                Object = new SoftwareApplication("https://example.edu") { HideCaliperContext = true },
+                EventTime = Instant.FromUtc(2019, 11, 15, 10, 15, 00),
+                EdApp = CaliperTestEntities.SoftwareAppV2(),
+                Generated = CaliperTestEntities.AggregateMeasureCollection2019(),
+                Group = new CourseSection("https://example.edu/terms/201601/courses/7/sections/1")
+                {
+                    CourseNumber = "CPS 435-01",
+                    Name = "CPS 435 Learning Analytics, Section 01",
+                    AcademicSession = "Fall 2016",
+                    Category = "seminar",
+                    SubOrganizationOf = new CourseOffering("https://example.edu/terms/201601/courses/7")
+                    {
+                        CourseNumber = "CPS 435",
+                        HideCaliperContext = true
+                    },
+                    DateCreated = CaliperTestEntities.Instant20160801060000,
+                    HideCaliperContext = true
+                },
+                Membership = new Membership("https://example.edu/terms/201601/courses/7/sections/1/rosters/1/members/554433")
+                {
+                    Member = person,
+                    Organization = new CourseSection("https://example.edu/terms/201601/courses/7/sections/1")
+                    {
+                        SubOrganizationOf = new CourseOffering("https://example.edu/terms/201601/courses/7") { HideCaliperContext = true },
+                        HideCaliperContext = true
+                    },
+                    Roles = new[] { Role.Learner },
+                    Status = Status.Active,
+                    DateCreated = CaliperTestEntities.Instant20161101060000,
+                    HideCaliperContext = true
+                },
+                Session = new Session("https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259")
+                {
+                    User = person,
+                    StartedAt = Instant.FromUtc(2016, 09, 15, 10, 00, 00),
+                    HideCaliperContext = true
+                },
+            };
+
+            var coerced = JsonAssertions.coerce(toolUseEvent, new string[] { "..edApp" });
+
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventToolUseUsedWithProgress");
+        }
+
+        [Test]
+        public void EventViewViewedDocument_MatchesReferenceJson()
+        {
+            var viewEvent = new ViewEvent(
+                "urn:uuid:cd088ca7-c044-405c-bb41-0b2a8506f907")
+            {
+                Profile = ProfileType.Reading,
+                Actor = CaliperTestEntities.Person554433(),
+                Action = Action.Viewed,
+                Object = new Document("https://example.edu/etexts/201.epub")
+                {
+                    Name = "IMS Caliper Implementation Guide",
+                    DateCreated = CaliperTestEntities.Instant20160801060000,
+                    DatePublished = CaliperTestEntities.Instant20161001060000,
+                    Version = "1.1",
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20161115101500,
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall16(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner(),
+                Session = CaliperTestEntities.Session6259edu()
+            };
+
+            viewEvent.EdApp.HideCaliperContext = true;
+            (viewEvent.Group as CourseSection).HideCaliperContext = true;
+            viewEvent.Membership.HideCaliperContext = true;
+            viewEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(viewEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventViewViewedDocument");
+        }
+
+        [Test]
+        public void EventViewViewedDocumentExtended_MatchesReferenceJson()
+        {
+            var viewEvent = new ViewEvent(
+                "urn:uuid:3a9bd869-addc-48b1-80f6-a14b2ff591ed")
+            {
+                Profile = ProfileType.Reading,
+                Actor = CaliperTestEntities.Person554433(),
+                Action = Action.Viewed,
+                Object = new Document("https://example.edu/etexts/200.epub")
+                {
+                    Name = "IMS Caliper Specification",
+                    Version = "1.1",
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20161115101500,
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall16(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner(),
+                Session = CaliperTestEntities.Session6259edu(),
+                Extensions = new
+                {
+                    job = new
+                    {
+                        id = "08c1233d-9ba3-40ac-952f-004c47a50ff7",
+                        jobTag = "caliper_batch_job",
+                        jobDate = Instant.FromUtc(2016, 11, 16, 01, 01, 00)
+                    }
+                }
+            };
+
+            viewEvent.EdApp.HideCaliperContext = true;
+            (viewEvent.Group as CourseSection).HideCaliperContext = true;
+            viewEvent.Membership.HideCaliperContext = true;
+            viewEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(viewEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventViewViewedDocumentExtended");
+        }
+
+        [Test]
+        public void EventViewViewedDocumentFedSession_MatchesReferenceJson()
+        {
+            var viewEvent = new ViewEvent(
+                "urn:uuid:4be6d29d-5728-44cd-8a8f-3d3f07e46b61")
+            {
+                Profile = ProfileType.Reading,
+                Actor = CaliperTestEntities.Person554433(),
+                Action = Action.Viewed,
+                Object = new Document("https://example.com/lti/reader/202.epub")
+                {
+                    Name = "Caliper Case Studies",
+                    MediaType = "application/epub+zip",
+                    DateCreated = CaliperTestEntities.Instant20180801090000,
+                    HideCaliperContext = true
+                },
+                EventTime = CaliperTestEntities.Instant20181115102000,
+                EdApp = new SoftwareApplication("https://example.com"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18b(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                FederatedSession = new LtiSession("https://example.edu/lti/sessions/b533eb02823f31024e6b7f53436c42fb99b31241")
+                {
+                    User = new Person("https://example.edu/users/554433") { HideCaliperContext = true },
+                    MessageParameters = new CaliperTestEntities.LtiParamsLtiSession(),
+                    DateCreated = CaliperTestEntities.Instant20181115101500,
+                    StartedAt = CaliperTestEntities.Instant20181115101500,
+                    HideCaliperContext = true
+                },
+                Session = CaliperTestEntities.Session1241_2018()
+            };
+
+            viewEvent.EdApp.HideCaliperContext = true;
+            (viewEvent.Group as CourseSection).HideCaliperContext = true;
+            viewEvent.Membership.HideCaliperContext = true;
+            viewEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(viewEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventViewViewedDocumentFedSession");
+        }
+
+        [Test]
+        public void EventViewViewedQuestionnaireItem_MatchesReferenceJson()
+        {
+            var viewEvent = new ViewEvent(
+                "urn:uuid:bc780773-ee1e-49f6-ab2b-fe16eb391dd8")
+            {
+                Profile = ProfileType.Survey,
+                Actor = CaliperTestEntities.Person554433(),
+                Action = Action.Viewed,
+                Object = new QuestionnaireItem("https://example.edu/surveys/100/questionnaires/30/items/2")
+                {
+                    Question = new OpenEndedQuestion("https://example.edu/surveys/100/questionnaires/30/items/2/question")
+                    {
+                        QuestionPosed = "What would you change about your course?",
+                        HideCaliperContext = true
+                    },
+                    Categories = new[] { "teaching effectiveness", "Course structure" },
+                    Weight = 1.0,
+                    HideCaliperContext = true
+                },
+                EventTime = Instant.FromUtc(2018, 11, 12, 10, 15, 00),
+                EdApp = new SoftwareApplication("https://example.edu"),
+                Group = CaliperTestEntities.CourseSectionCPS43501Fall18(),
+                Membership = CaliperTestEntities.EntityMembership554433Learner_2018(),
+                Session = new Session("https://example.edu/sessions/f095bbd391ea4a5dd639724a40b606e98a631823")
+                {
+                    StartedAt = Instant.FromUtc(2018, 11, 12, 10, 00, 00)
+                }
+            };
+
+            viewEvent.EdApp.HideCaliperContext = true;
+            (viewEvent.Group as CourseSection).HideCaliperContext = true;
+            viewEvent.Membership.HideCaliperContext = true;
+            viewEvent.Session.HideCaliperContext = true;
+
+            var coerced = JsonAssertions.coerce(viewEvent,
+                new string[] { "..edApp", "..membership.member", "..membership.organization" });
+            JsonAssertions.AssertSameObjectJson(coerced, "caliperEventViewViewedQuestionnaireItem");
+        }
+
+        [Test]
+        public void IdentifierSystemIdentifier_MatchesReferenceJson()
+        {
+            var identifier = new SystemIdentifier()
+            {
+                Identifier = "https://example.edu/users/554433",
+                IdentifierType = "LtiUserId",
+                Source = new SoftwareApplication("https://example.edu") { HideCaliperContext = true },
+                HideCaliperContext = true
+            };
+
+            JsonAssertions.AssertSameObjectJson(identifier, "caliperIdentifierSystemIdentifier");
+        }
     }
 }

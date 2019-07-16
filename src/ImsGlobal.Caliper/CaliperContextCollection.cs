@@ -9,16 +9,16 @@ namespace ImsGlobal.Caliper {
     {
         private readonly List<ICaliperContext> contexts;
 
-        public CaliperContextCollection(ICaliperContext context)
+        public CaliperContextCollection()
         {
-            this.contexts = new List<ICaliperContext>{ context };
+            this.contexts = new List<ICaliperContext>();
         }
 
         public ICaliperContext[] Value => this.contexts.ToArray();
 
         public void Add(ICaliperContext context)
         {
-            if(context != null)
+            if (context != null)
                 this.contexts.Add(context);
         }
     }

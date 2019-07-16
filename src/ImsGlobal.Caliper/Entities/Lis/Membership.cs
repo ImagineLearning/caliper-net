@@ -18,7 +18,6 @@ namespace ImsGlobal.Caliper.Entities.Lis {
 		public Membership(string id, ICaliperContext caliperContext = null)
 			: base(id, caliperContext) {
 			this.Type = EntityType.Membership;
-			this.Roles = new List<IRole>();
 		}
 
 		[JsonProperty( "member", Order = 21 )]

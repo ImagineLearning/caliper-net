@@ -6,14 +6,11 @@ namespace ImsGlobal.Caliper.Entities.Annotation {
 	/// Base type for all PositionSelector types. As of Caliper 1.1, 
 	/// only TextPositionSelector is defined.
 	/// </summary>
-	public abstract class Selector {
-
-		public Selector(SelectorType type) {
+	public abstract class Selector : Entity
+    {
+		public Selector(SelectorType type, ICaliperContext caliperContext = null) : base(id: null, context: caliperContext) {
 			this.Type = type;
 		}
-
-		[JsonProperty("type", Order = 0)]
-		public IType Type { get; set; }
 
 	}
 }

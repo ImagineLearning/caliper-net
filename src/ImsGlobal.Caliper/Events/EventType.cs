@@ -20,13 +20,17 @@ namespace ImsGlobal.Caliper.Events {
         public static readonly EventType ResourceManagement = new EventType("ResourceManagementEvent");
         public static readonly EventType Search = new EventType("SearchEvent");
         public static readonly EventType Session = new EventType( "SessionEvent" );
+        public static readonly EventType Survey = new EventType("SurveyEvent");
+        public static readonly EventType SurveyInvitation = new EventType("SurveyInvitationEvent");
         public static readonly EventType Thread = new EventType("ThreadEvent");
         public static readonly EventType ToolLaunch = new EventType("ToolLaunchEvent");
         public static readonly EventType ToolUse = new EventType("ToolUseEvent");
         public static readonly EventType View = new EventType( "ViewEvent" );
+        public static readonly EventType Questionnaire = new EventType("QuestionnaireEvent");
+        public static readonly EventType QuestionnaireItem = new EventType("QuestionnaireItemEvent");
 
 
-		public EventType() {}
+        public EventType() {}
 
 		public EventType( string value ) {
 			this.Value = value;

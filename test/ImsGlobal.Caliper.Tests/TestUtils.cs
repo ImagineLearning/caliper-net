@@ -47,13 +47,13 @@ namespace ImsGlobal.Caliper.Tests {
 				}
 			}
 
-			//find the caliper-common-fixtures sibling to caliper-net
-			var dirs = startDir.GetDirectories();
+            //find the caliper-spec/fixtures sibling to caliper-net
+            var dirs = startDir.GetDirectories();
 
 			var fixturesDirInfo = Array.Find(dirs, (DirectoryInfo obj)
-			   => obj.Name.Equals("caliper-common-fixtures"));
+			   => obj.Name.Equals("caliper-spec"));
 
-            return fixturesDirInfo.FullName;
+            return Path.Combine(fixturesDirInfo.FullName, "fixtures");
         }
 
 	}
