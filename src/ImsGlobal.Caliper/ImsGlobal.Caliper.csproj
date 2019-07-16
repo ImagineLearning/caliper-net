@@ -59,6 +59,7 @@
     <Compile Include="Entities\Agent\Agent.cs" />
     <Compile Include="Entities\AggregateMeasure\AggregateMeasure.cs" />
     <Compile Include="Entities\AggregateMeasure\AggregateMeasureCollection.cs" />
+    <Compile Include="Entities\Annotation\SystemIdentifier.cs" />
     <Compile Include="Entities\Collection\DigitalResourceCollection.cs" />
     <Compile Include="Entities\Collection\ICollection.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
@@ -96,6 +97,17 @@
     <Compile Include="Entities\Search\Query.cs" />
     <Compile Include="Entities\Search\SearchResponse.cs" />
     <Compile Include="Entities\Session\LTISession.cs" />
+    <Compile Include="Entities\Survey\RatingScaleResponse.cs" />
+    <Compile Include="Entities\Survey\OpenEndedResponse.cs" />
+    <Compile Include="Entities\Survey\OpenEndedQuestion.cs" />
+    <Compile Include="Entities\Survey\MultiSelectResponse.cs" />
+    <Compile Include="Entities\Survey\MultiSelectQuestion.cs" />
+    <Compile Include="Entities\Survey\DateTimeResponse.cs" />
+    <Compile Include="Entities\Survey\DateTimeQuestion.cs" />
+    <Compile Include="Entities\Survey\Questionnaire.cs" />
+    <Compile Include="Entities\Survey\QuestionnaireItem.cs" />
+    <Compile Include="Entities\Survey\SurveyInvitation.cs" />
+    <Compile Include="Entities\Survey\Survey.cs" />
     <Compile Include="Entities\ToolLaunch\Link.cs" />
     <Compile Include="Entities\ToolLaunch\LtiLink.cs" />
     <Compile Include="Entities\W3c\IStatus.cs" />
@@ -145,9 +157,15 @@
     <Compile Include="Events\Media\MediaEvent.cs" />
     <Compile Include="Events\Outcome\GradeEvent.cs" />
     <Compile Include="Events\Reading\ViewEvent.cs" />
+    <Compile Include="Events\Survey\SurveyEvent.cs" />
+    <Compile Include="Events\Survey\SurveyInvitationEvent.cs" />
+    <Compile Include="Events\Survey\QuestionnaireEvent.cs" />
+    <Compile Include="Events\Survey\QuestionnaireItemEvent.cs" />
     <Compile Include="Events\Tool\ToolLaunchEvent.cs" />
     <Compile Include="ICaliperContext.cs" />
     <Compile Include="Properties\FriendAssemblies.cs" />
+    <Compile Include="Protocol\CaliperEndpoint.cs" />
+    <Compile Include="Protocol\CaliperEndpointConfigPayload.cs" />
     <Compile Include="Util\IJsonId.cs" />
     <Compile Include="Util\ICaliperContextCollectionJsonValue.cs" />
     <Compile Include="Util\IJsonValue.cs" />
@@ -183,7 +201,6 @@
     <Compile Include="Entities\Outcome\Score.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".travis.yml" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

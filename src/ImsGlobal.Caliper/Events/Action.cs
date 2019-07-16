@@ -8,7 +8,8 @@ namespace ImsGlobal.Caliper.Events {
 	public sealed class Action : IJsonValue {
 
 		public static readonly Action Abandoned = new Action( "Abandoned");
-		public static readonly Action Activated = new Action( "Activated");
+        public static readonly Action Accepted = new Action("Accepted");
+        public static readonly Action Activated = new Action( "Activated");
 		public static readonly Action Added = new Action( "Added");
         public static readonly Action Archived = new Action("Archived");
         public static readonly Action Attached = new Action( "Attached");
@@ -49,8 +50,9 @@ namespace ImsGlobal.Caliper.Events {
 		public static readonly Action Modified = new Action( "Modified");
 		public static readonly Action Muted = new Action( "Muted");
 		public static readonly Action NavigatedTo = new Action( "NavigatedTo");
-		public static readonly Action OpenedPopout = new Action( "OpenedPopout");
-		public static readonly Action Paused = new Action( "Paused");
+        public static readonly Action OpenedPopout = new Action( "OpenedPopout");
+        public static readonly Action OptedIn = new Action("OptedIn");
+        public static readonly Action Paused = new Action( "Paused");
 		public static readonly Action Posted = new Action( "Posted");
         public static readonly Action Printed = new Action("Printed");
         public static readonly Action Published = new Action("Published");
@@ -68,7 +70,8 @@ namespace ImsGlobal.Caliper.Events {
         public static readonly Action Rewound = new Action( "Rewound");
         public static readonly Action Saved = new Action("Saved");
         public static readonly Action Searched = new Action( "Searched");
-		public static readonly Action Shared = new Action( "Shared" );
+        public static readonly Action Sent = new Action("Sent");
+        public static readonly Action Shared = new Action( "Shared" );
 		public static readonly Action Showed = new Action( "Showed" );
 		public static readonly Action Skipped = new Action( "Skipped" );
 		public static readonly Action Started = new Action( "Started" );

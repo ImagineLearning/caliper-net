@@ -15,7 +15,8 @@ namespace ImsGlobal.Caliper.Events {
     public class Event {
         public Event(string id, ICaliperContext caliperContext = null) {
 			this.Id = id;
-            this.Context = new CaliperContextCollection(caliperContext ?? CaliperContext.Context);
+            this.Context = new CaliperContextCollection();
+            this.Context.Add(caliperContext ?? CaliperContext.Context);
             this.Type = EventType.Event;
         }
 
