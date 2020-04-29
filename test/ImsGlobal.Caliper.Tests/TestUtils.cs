@@ -31,8 +31,8 @@ namespace ImsGlobal.Caliper.Tests {
 			return content;
 		}
 
-		public static string GetFixturesPath() {
-
+		public static string GetFixturesPath()
+		{
 			//get the parent dir of the caliper-net dir
 			var startDir = new DirectoryInfo(Path.GetDirectoryName(
 				Assembly.GetExecutingAssembly().Location));
@@ -42,19 +42,12 @@ namespace ImsGlobal.Caliper.Tests {
 			while (startDir.Parent != null) {
 				startDir = startDir.Parent;
 				if (startDir.Name.Equals("caliper-net")) {
-					startDir = startDir.Parent;
 					break;
 				}
 			}
 
-			//find the caliper-common-fixtures sibling to caliper-net
-			var dirs = startDir.GetDirectories();
-
-			var fixturesDirInfo = Array.Find(dirs, (DirectoryInfo obj)
-			   => obj.Name.Equals("caliper-common-fixtures"));
-
-			return Path.Combine(new string[5]
-				{ fixturesDirInfo.FullName, "src", "test", "resources", "fixtures" });
+			return Path.Combine(new string[6]
+				{ startDir.FullName, "test", "ImsGlobal.Caliper.Tests", "caliper-common-fixtures", "resources", "fixtures" });
 
 		}
 
