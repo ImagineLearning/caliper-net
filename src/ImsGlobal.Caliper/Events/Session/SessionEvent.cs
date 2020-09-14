@@ -1,13 +1,23 @@
-﻿namespace ImsGlobal.Caliper.Events.Session {
+﻿using System;
 
-	public class SessionEvent : Event {
+namespace ImsGlobal.Caliper.Events.Session
+{
 
-		public SessionEvent( string id, Action action ) 
-			:base ( id ) {
-			this.Type = EventType.Session;
-			this.Action = action;
-		}
+    public class SessionEvent : Event
+    {
+        /// <summary>
+        /// parameterless constructor required for JSON Deserialization
+        /// </summary>
+        public SessionEvent() { }
 
-	}
+        public SessionEvent(Guid id, Action action) : this(id.ToCaliperUUID(), action) { }
+
+        public SessionEvent(string id, Action action) : base(id)
+        {
+            Type = EventType.Session;
+            Action = action;
+        }
+
+    }
 
 }

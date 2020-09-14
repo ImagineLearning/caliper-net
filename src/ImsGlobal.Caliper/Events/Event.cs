@@ -9,17 +9,23 @@ using System;
 
 namespace ImsGlobal.Caliper.Events
 {
-
     /// <summary>
     /// Default base class for Caliper events.
     /// </summary>
     public class Event
     {
+        /// <summary>
+        /// parameterless constructor required for JSON Deserialization
+        /// </summary>
+        public Event() { }
+
+        public Event(Guid id) : this(id.ToCaliperUUID()) { }
+
         public Event(string id)
         {
-            this.Id = id;
-            this.Context = CaliperContext.Context;
-            this.Type = EventType.Event;
+            Id = id;
+            Context = CaliperContext.Context;
+            Type = EventType.Event;
         }
 
         /// <summary>
@@ -32,7 +38,7 @@ namespace ImsGlobal.Caliper.Events
         /// Required - id of the CaliperEvent
         /// </summary>
         [JsonProperty("id", Order = 2)]
-        public String Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Required - Type of the CaliperEvent

@@ -1,16 +1,23 @@
-﻿namespace ImsGlobal.Caliper.Events.Outcome {
+﻿using System;
 
-	/// <summary>
-	/// Event raised when actions related to an outcome are performed.
-	/// </summary>
-	public class GradeEvent : Event {
+namespace ImsGlobal.Caliper.Events.Outcome
+{
+    /// <summary>
+    /// Event raised when actions related to an outcome are performed.
+    /// </summary>
+    public class GradeEvent : Event
+    {
+        /// <summary>
+        /// parameterless constructor required for JSON Deserialization
+        /// </summary>
+        public GradeEvent() { }
 
-		public GradeEvent( string id, Action action ) 
-			:base( id ) {
-			this.Type = EventType.Outcome;
-			this.Action = action;
-		}
+        public GradeEvent(Guid id, Action action) : this(id.ToCaliperUUID(), action) { }
 
-	}
-
+        public GradeEvent(string id, Action action) : base(id)
+        {
+            Type = EventType.Outcome;
+            Action = action;
+        }
+    }
 }

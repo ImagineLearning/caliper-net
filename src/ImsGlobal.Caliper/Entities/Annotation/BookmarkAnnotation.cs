@@ -1,16 +1,15 @@
 ﻿using Newtonsoft.Json;
 
-namespace ImsGlobal.Caliper.Entities.Annotation {
+namespace ImsGlobal.Caliper.Entities.Annotation
+{
+    public class BookmarkAnnotation : Annotation
+    {
+        public BookmarkAnnotation(string id) : base(id)
+        {
+            Type = EntityType.Bookmark;
+        }
 
-	public class BookmarkAnnotation : Annotation {
-
-		public BookmarkAnnotation( string id )
-			: base( id ) {
-			this.Type = EntityType.Bookmark;
-		}
-
-		[JsonProperty( "bookmarkNotes", Order = 31 )]
-		public string BookmarkNotes { get; set; }
-
-	}
+        [JsonProperty("bookmarkNotes", Order = 31)]
+        public string BookmarkNotes { get; set; }
+    }
 }

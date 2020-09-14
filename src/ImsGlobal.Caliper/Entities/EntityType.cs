@@ -1,67 +1,109 @@
+using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
 
 namespace ImsGlobal.Caliper.Entities
 {
-	using ImsGlobal.Caliper.Util;
+    [JsonConverter(typeof(JsonValueConverter<EntityType>))]
+    public class EntityType : IType, IJsonValue
+    {
+        public static EntityType Agent { get; } = new EntityType("Agent");
 
-	[JsonConverter(typeof(JsonValueConverter<EntityType>))]
-	public class EntityType : IType, IJsonValue
-	{
+        public static EntityType Annotation { get; } = new EntityType("Annotation");
 
-		public static readonly EntityType Agent = new EntityType("Agent");
-		public static readonly EntityType Annotation = new EntityType("Annotation");
-		public static readonly EntityType Assessment = new EntityType("Assessment");
-		public static readonly EntityType AssessmentItem = new EntityType("AssessmentItem");
-		public static readonly EntityType AssignableDigitalResource = new EntityType("AssignableDigitalResource");
-		public static readonly EntityType Attempt = new EntityType("Attempt");
-		public static readonly EntityType AudioObject = new EntityType("AudioObject");
-		public static readonly EntityType Bookmark = new EntityType("BookmarkAnnotation");
-		public static readonly EntityType Chapter = new EntityType("Chapter");
-		public static readonly EntityType CourseOffering = new EntityType("CourseOffering");
-		public static readonly EntityType CourseSection = new EntityType("CourseSection");
-		public static readonly EntityType DigitalResource = new EntityType("DigitalResource");
-		public static readonly EntityType DigitalResourceCollection = new EntityType("DigitalResourceCollection");
-		public static readonly EntityType Document = new EntityType("Document");
-		public static readonly EntityType Entity = new EntityType("Entity");
-		public static readonly EntityType FillInBlank = new EntityType("FillinBlankResponse");
-		public static readonly EntityType Forum = new EntityType("Forum");
-		public static readonly EntityType Frame = new EntityType("Frame");
-		public static readonly EntityType Group = new EntityType("Group");
-		public static readonly EntityType Highlight = new EntityType("HighlightAnnotation");
-		public static readonly EntityType ImageObject = new EntityType("ImageObject");
-		public static readonly EntityType LearningObjective = new EntityType("LearningObjective");
-		public static readonly EntityType LtiSession = new EntityType("LtiSession");
-		public static readonly EntityType MediaLocation = new EntityType("MediaLocation");
-		public static readonly EntityType MediaObject = new EntityType("MediaObject");
-		public static readonly EntityType Membership = new EntityType("Membership");
-		public static readonly EntityType Message = new EntityType("Message");
-		public static readonly EntityType MultipleChoice = new EntityType("MultipleChoiceResponse");
-		public static readonly EntityType MultipleResponse = new EntityType("MultipleResponseResponse");
-		public static readonly EntityType Page = new EntityType("Page");
-		public static readonly EntityType Person = new EntityType("Person");
-		public static readonly EntityType Organization = new EntityType("Organization");
-		public static readonly EntityType Response = new EntityType("Response");
-		public static readonly EntityType Result = new EntityType("Result");
-		public static readonly EntityType Score = new EntityType("Score");
-		public static readonly EntityType Session = new EntityType("Session");
-		public static readonly EntityType Share = new EntityType("SharedAnnotation");
-		public static readonly EntityType SoftwareApplication = new EntityType("SoftwareApplication");
-		public static readonly EntityType SelectText = new EntityType("SelectTextResponse");
-		public static readonly EntityType Tag = new EntityType("TagAnnotation");
-		public static readonly EntityType Thread = new EntityType("Thread");
-		public static readonly EntityType TrueFalse = new EntityType("TrueFalseResponse");
-		public static readonly EntityType VideoObject = new EntityType("VideoObject");
-		public static readonly EntityType WebPage = new EntityType("WebPage");
+        public static EntityType Assessment { get; } = new EntityType("Assessment");
 
-		public EntityType() { }
+        public static EntityType AssessmentItem { get; } = new EntityType("AssessmentItem");
 
-		public EntityType(string value)
-		{
-			this.Value = value;
-		}
+        public static EntityType AssignableDigitalResource { get; } = new EntityType("AssignableDigitalResource");
 
-		public string Value { get; set; }
+        public static EntityType Attempt { get; } = new EntityType("Attempt");
 
-	}
+        public static EntityType AudioObject { get; } = new EntityType("AudioObject");
+
+        public static EntityType Bookmark { get; } = new EntityType("BookmarkAnnotation");
+
+        public static EntityType Chapter { get; } = new EntityType("Chapter");
+
+        public static EntityType CourseOffering { get; } = new EntityType("CourseOffering");
+
+        public static EntityType CourseSection { get; } = new EntityType("CourseSection");
+
+        public static EntityType DigitalResource { get; } = new EntityType("DigitalResource");
+
+        public static EntityType DigitalResourceCollection { get; } = new EntityType("DigitalResourceCollection");
+
+        public static EntityType Document { get; } = new EntityType("Document");
+
+        public static EntityType Entity { get; } = new EntityType("Entity");
+
+        public static EntityType FillInBlank { get; } = new EntityType("FillinBlankResponse");
+
+        public static EntityType Forum { get; } = new EntityType("Forum");
+
+        public static EntityType Frame { get; } = new EntityType("Frame");
+
+        public static EntityType Group { get; } = new EntityType("Group");
+
+        public static EntityType Highlight { get; } = new EntityType("HighlightAnnotation");
+
+        public static EntityType ImageObject { get; } = new EntityType("ImageObject");
+
+        public static EntityType LearningObjective { get; } = new EntityType("LearningObjective");
+
+        public static EntityType LtiSession { get; } = new EntityType("LtiSession");
+
+        public static EntityType MediaLocation { get; } = new EntityType("MediaLocation");
+
+        public static EntityType MediaObject { get; } = new EntityType("MediaObject");
+
+        public static EntityType Membership { get; } = new EntityType("Membership");
+
+        public static EntityType Message { get; } = new EntityType("Message");
+
+        public static EntityType MultipleChoice { get; } = new EntityType("MultipleChoiceResponse");
+
+        public static EntityType MultipleResponse { get; } = new EntityType("MultipleResponseResponse");
+
+        public static EntityType Page { get; } = new EntityType("Page");
+
+        public static EntityType Person { get; } = new EntityType("Person");
+
+        public static EntityType Organization { get; } = new EntityType("Organization");
+
+        public static EntityType Response { get; } = new EntityType("Response");
+
+        public static EntityType Result { get; } = new EntityType("Result");
+
+        public static EntityType Score { get; } = new EntityType("Score");
+
+        public static EntityType Session { get; } = new EntityType("Session");
+
+        public static EntityType Share { get; } = new EntityType("SharedAnnotation");
+
+        public static EntityType SoftwareApplication { get; } = new EntityType("SoftwareApplication");
+
+        public static EntityType SelectText { get; } = new EntityType("SelectTextResponse");
+
+        public static EntityType Tag { get; } = new EntityType("TagAnnotation");
+
+        public static EntityType Thread { get; } = new EntityType("Thread");
+
+        public static EntityType TrueFalse { get; } = new EntityType("TrueFalseResponse");
+
+        public static EntityType VideoObject { get; } = new EntityType("VideoObject");
+
+        public static EntityType WebPage { get; } = new EntityType("WebPage");
+
+
+        public EntityType() { }
+
+        public EntityType(string value)
+        {
+            this.Value = value;
+        }
+
+        public string Value { get; set; }
+
+    }
 
 }

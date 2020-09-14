@@ -8,10 +8,8 @@ using NUnit.Framework;
 
 namespace ImsGlobal.Caliper.Tests.SimpleHelpers
 {
-
     internal static class JsonAssertions
     {
-
         static JsonAssertions()
         {
         }

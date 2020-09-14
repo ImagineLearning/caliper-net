@@ -3,87 +3,92 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace ImsGlobal.Caliper.Tests {
+namespace ImsGlobal.Caliper.Tests
+{
+    internal static class TestUtils
+    {
+        private static string fixturesPath = GetFixturesPath();
 
-	internal static class TestUtils {
+        /// <summary>
+        /// Loads a reference json file from the caliper-common-fixtures project. The
+        /// fixtures project must be a sibling to the caliper-net project on the filesystem.
+        /// </summary>
+        /// <returns>The reference json file content as a string.</returns>
+        /// <param name="refJsonName">Reference json name, without extension.</param>
+        public static string LoadReferenceJsonFixture(string refJsonName)
+        {
+            FixtureCoverageChecker.Add(refJsonName);
 
-		private static string fixturesPath = GetFixturesPath();
+            string content = null;
+            var stream = new FileStream($"{fixturesPath}/{refJsonName}.json", FileMode.Open);
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                content = reader.ReadToEnd();
+            }
 
-		/// <summary>
-		/// Loads a reference json file from the caliper-common-fixtures project. The
-		/// fixtures project must be a sibling to the caliper-net project on the filesystem.
-		/// </summary>
-		/// <returns>The reference json file content as a string.</returns>
-		/// <param name="refJsonName">Reference json name, without extension.</param>
-		public static string LoadReferenceJsonFixture(string refJsonName) {
+            return content;
+        }
 
-			FixtureCoverageChecker.Add(refJsonName);
+        public static string GetFixturesPath()
+        {
+            //get the parent dir of the caliper-net dir
+            var startDir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
-			var stream = new FileStream(fixturesPath + Path.DirectorySeparatorChar
-				+ refJsonName + ".json", FileMode.Open);
+            //given different IDEs and runtime modes, we don't know exactly 
+            //where we are, so iterate upwards
+            while (startDir.Parent != null)
+            {
+                startDir = startDir.Parent;
+                if (startDir.Name.Equals("caliper-net"))
+                    break;
+            }
 
-			string content = null;
+            return Path.Combine(new[]
+            {
+                startDir.FullName,
+                "test",
+                "ImsGlobal.Caliper.Tests",
+                "caliper-common-fixtures",
+                "resources",
+                "fixtures"
+            });
+        }
+    }
 
-			using (StreamReader reader = new StreamReader(stream)) {
-				content = reader.ReadToEnd();
-			}
+    internal static class FixtureCoverageChecker
+    {
+        private static string fixturesPath = TestUtils.GetFixturesPath();
+        private static string[] fixtures = Directory.GetFiles(fixturesPath);
+        private static HashSet<string> used;
 
-			return content;
-		}
+        public static void Initialize()
+        {
+            used = new HashSet<string>();
+        }
 
-		public static string GetFixturesPath()
-		{
-			//get the parent dir of the caliper-net dir
-			var startDir = new DirectoryInfo(Path.GetDirectoryName(
-				Assembly.GetExecutingAssembly().Location));
+        public static void Add(string reference)
+        {
+            used.Add($"{fixturesPath}/{reference}.json");
+        }
 
-			//given different IDEs and runtime modes, we don't know exactly 
-			//where we are, so iterate upwards
-			while (startDir.Parent != null) {
-				startDir = startDir.Parent;
-				if (startDir.Name.Equals("caliper-net")) {
-					break;
-				}
-			}
+        public static bool Compare()
+        {
+            if (used.Count == fixtures.Length)
+                return true;
 
-			return Path.Combine(new string[6]
-				{ startDir.FullName, "test", "ImsGlobal.Caliper.Tests", "caliper-common-fixtures", "resources", "fixtures" });
+            Console.WriteLine("Fixture entries used: " + used.Count);
+            Console.WriteLine("Fixture entries in fixtures dir: " + fixtures.Length);
+            Console.WriteLine("Unused: ");
 
-		}
-
-	}
-
-	internal static class FixtureCoverageChecker {
-		private static string fixturesPath = TestUtils.GetFixturesPath();
-		private static string[] fixtures = Directory.GetFiles(fixturesPath);
-		private static HashSet<String> used;
-
-		public static void Initialize() {
-			used = new HashSet<String>();
-		}
-
-		public static void Add(string reference) {
-			String full = System.String.Concat(new[] { fixturesPath, "/", reference, ".json" });
-			used.Add(full);
-		}
-
-		public static bool Compare() {
-
-			if (used.Count == fixtures.Length) return true;
-
-			Console.WriteLine("Fixture entries used: " + used.Count);
-			Console.WriteLine("Fixture entries in fixtures dir: " + fixtures.Length);
-
-
-			Console.WriteLine("Unused: ");
-
-			foreach (string fxt in fixtures) {
-				if (!used.Contains(fxt)) {
-					Console.WriteLine(fxt);
-				}
-			}
-			return false;
-		}
-	}
+            foreach (string fixture in fixtures)
+            {
+                if (!used.Contains(fixture))
+                {
+                    Console.WriteLine(fixture);
+                }
+            }
+            return false;
+        }
+    }
 
 }

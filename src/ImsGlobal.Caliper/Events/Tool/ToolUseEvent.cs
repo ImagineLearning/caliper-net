@@ -1,13 +1,20 @@
-﻿namespace ImsGlobal.Caliper.Events.Tool {
+﻿using System;
 
-	public class ToolUseEvent : Event {
+namespace ImsGlobal.Caliper.Events.Tool
+{
+    public class ToolUseEvent : Event
+    {
+        /// <summary>
+        /// parameterless constructor required for JSON Deserialization
+        /// </summary>
+        public ToolUseEvent() { }
 
-		public ToolUseEvent( string id, Action action ) 
-			:base( id ){
-			this.Type = EventType.ToolUse;
-			this.Action = action;
-		}
+        public ToolUseEvent(Guid id, Action action) : this(id.ToCaliperUUID(), action) { }
 
+        public ToolUseEvent(string id, Action action) : base(id)
+        {
+            Type = EventType.ToolUse;
+            Action = action;
+        }
     }
-
 }

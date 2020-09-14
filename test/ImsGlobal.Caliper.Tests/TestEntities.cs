@@ -510,25 +510,22 @@ namespace ImsGlobal.Caliper.Tests
                 edu_example_course_section_learner = "https://example.edu/users/554433",
                 edu_example_course_section_instructor = "https://example.edu/faculty/1234"
             };
-
-
         };
 
-        public static DigitalResource DigitalResourceSyllabusPDF = new DigitalResource(
-            "https://example.edu/terms/201601/courses/7/sections/1/resources/1/syllabus.pdf")
-        {
-            Name = "Course Syllabus",
-            MediaType = "application/pdf",
-            Creators = new[] { new Person("https://example.edu/users/223344") },
-            IsPartOf = new DigitalResourceCollection(
-                    "https://example.edu/terms/201601/courses/7/sections/1/resources/1")
+        public static DigitalResource DigitalResourceSyllabusPDF
+            = new DigitalResource("https://example.edu/terms/201601/courses/7/sections/1/resources/1/syllabus.pdf")
             {
-                Name = "Course Assets",
-                IsPartOf = new CourseSection("https://example.edu/terms/201601/courses/7/sections/1")
-            },
-            DateCreated = Instant.FromUtc(2016, 08, 02, 11, 32, 00)
+                Name = "Course Syllabus",
+                MediaType = "application/pdf",
+                Creators = new[] { new Person("https://example.edu/users/223344") },
+                IsPartOf = new DigitalResourceCollection("https://example.edu/terms/201601/courses/7/sections/1/resources/1")
+                {
+                    Name = "Course Assets",
+                    IsPartOf = new CourseSection("https://example.edu/terms/201601/courses/7/sections/1")
+                },
+                DateCreated = Instant.FromUtc(2016, 08, 02, 11, 32, 00)
 
-        };
+            };
 
     }
 }
