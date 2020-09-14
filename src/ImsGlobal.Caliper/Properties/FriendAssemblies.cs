@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo( "ImsGlobal.Caliper.Tests" )]
+[assembly: InternalsVisibleTo("ImsGlobal.Caliper.Tests")]

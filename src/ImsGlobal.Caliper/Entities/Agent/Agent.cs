@@ -1,18 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using ImsGlobal.Caliper.Entities.Foaf;
 
-using Newtonsoft.Json;
-using NodaTime;
-
-namespace ImsGlobal.Caliper.Entities.Agent {
-	using ImsGlobal.Caliper.Entities.Foaf;
-
-	public class Agent : Entity, IAgent {
-
-		public Agent( string id )
-			:base (id) {
-            this.Type = EntityType.Agent;
-		}
-
-	}
-
+namespace ImsGlobal.Caliper.Entities.Agent
+{
+    public class Agent : Entity, IAgent
+    {
+        public Agent(string id) : base(id)
+        {
+            Type = EntityType.Agent;
+        }
+    }
 }

@@ -1,37 +1,20 @@
 ﻿using System;
-
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ImsGlobal.Caliper.Util {
+namespace ImsGlobal.Caliper.Util
+{
+    internal sealed class JsonValueConverter<T> : JsonConverter<T> where T : IJsonValue, new()
+    {
+        public override T ReadJson(JsonReader reader, Type objectType, T existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            return new T { Value = JToken.Load(reader).ToString() };
+        }
 
-	internal sealed class JsonValueConverter<T> : JsonConverter
-		where T : IJsonValue, new() {
-
-		public override bool CanConvert( Type objectType ) {
-			return objectType == typeof( T );
-		}
-
-		public override object ReadJson(
-			JsonReader reader,
-			Type objectType,
-			object existingValue,
-			JsonSerializer serializer ) {
-
-			return new T {
-				Value = JToken.Load( reader ).ToString()
-			};
-		}
-
-		public override void WriteJson(
-			JsonWriter writer,
-			object value,
-			JsonSerializer serializer ) {
-
-			var obj = (T)value;
-			JToken.FromObject( obj.Value ).WriteTo( writer );
-		}
-
-	}
-
+        public override void WriteJson(JsonWriter writer, T value, JsonSerializer serializer)
+        {
+            JToken.FromObject(value.Value).WriteTo(writer);
+        }
+    }
 }
