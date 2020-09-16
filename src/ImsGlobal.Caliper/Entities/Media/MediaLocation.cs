@@ -1,23 +1,39 @@
 
+using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
-using NodaTime;
+using System;
 
-namespace ImsGlobal.Caliper.Entities.Media {
+using NetCore = System.Text.Json.Serialization;
 
-	public class MediaLocation : DigitalResource {
 
-		public MediaLocation( string id )
-			: base( id ) {
-			this.Type = EntityType.MediaLocation;
-		}
+namespace ImsGlobal.Caliper.Entities.Media
+{
+    /// <summary>
+    /// A Caliper MediaLocation provides the current playback position in a MediaObject such as an AudioObject or VideoObject.
+    /// </summary>
+    public class MediaLocation : DigitalResource
+    {
+        /// <summary>
+        /// parameterless constructor required for JSON Deserialization
+        /// </summary>
+        public MediaLocation()
+        {
+            Type = EntityType.MediaLocation;
+        }
 
-		/// <summary>
-		/// The time value (from beginning of media) that indicates the
-		/// current location.
-		/// </summary>
-		[JsonProperty( "currentTime", Order = 71 )]
-		public Period CurrentTime { get; set; }
+        public MediaLocation(Uri id) : base(id)
+        {
+            Type = EntityType.MediaLocation;
+        }
 
-	}
 
+        /// <summary>
+        /// A time interval or duration that represents the current playback position measured from the beginning of an 
+        /// AudioObject or VideoObject. If a currentTime is specified the value MUST conform to the ISO 8601 duration format.
+        /// </summary>
+        [JsonProperty("currentTime", Order = 71)]
+        [JsonConverter(typeof(CaliperDurationNewtonsoftConverter))]
+        [NetCore.JsonConverter(typeof(CaliperDurationConverter))]
+        public TimeSpan? CurrentTime { get; set; }
+    }
 }

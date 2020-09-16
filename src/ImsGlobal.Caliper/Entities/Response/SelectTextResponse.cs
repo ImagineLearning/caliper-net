@@ -1,19 +1,34 @@
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
-using Newtonsoft.Json;
 
-namespace ImsGlobal.Caliper.Entities.Response {
+namespace ImsGlobal.Caliper.Entities.Response
+{
+    /// <summary>
+    /// A Caliper SelectTextResponse represents a type of Response that identifies text or a mapping from a presented paragraph 
+    /// or list.
+    /// </summary>
+    public class SelectTextResponse : Response
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public SelectTextResponse()
+        {
+            Type = EntityType.SelectText;
+        }
 
-	public class SelectTextResponse : Response {
+        public SelectTextResponse(Uri id) : base(id)
+        {
+            Type = EntityType.SelectText;
+        }
 
-		public SelectTextResponse( string id )
-			: base( id ) {
-			this.Type = EntityType.SelectText;
-		}
 
-		[JsonProperty( "values", Order = 31 )]
-		public IList<string> Values { get; set; }
-
-	}
-
+        /// <summary>
+        /// An ordered collection of one or more selected options
+        /// </summary>
+        [JsonProperty("values", Order = 31)]
+        public List<string> Values { get; set; }
+    }
 }

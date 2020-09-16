@@ -1,21 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using ImsGlobal.Caliper.Util;
+using Newtonsoft.Json;
 
-namespace ImsGlobal.Caliper.Entities.Annotation {
-	using ImsGlobal.Caliper.Util;
 
-	[JsonConverter(typeof(JsonValueConverter<SelectorType>))]
-	public sealed class SelectorType : IType, IJsonValue {
+namespace ImsGlobal.Caliper.Entities.Annotation
+{
+    [JsonConverter(typeof(JsonValueConverter<SelectorType>))]
+    public sealed class SelectorType : IType, IJsonValue
+    {
+        public static SelectorType Text { get; } = new SelectorType("TextPositionSelector");
 
-		public static readonly SelectorType Text = new SelectorType("TextPositionSelector");
+        public SelectorType() { }
 
-		public SelectorType() { }
+        public SelectorType(string value)
+        {
+            Value = value;
+        }
 
-		public SelectorType(string uri) {
-			this.Value = uri;
-		}
-
-		public string Value { get; set; }
-
-	}
-
+        public string Value { get; set; }
+    }
 }

@@ -1,31 +1,42 @@
 ﻿
+using ImsGlobal.Caliper.Entities.Agent;
 using Newtonsoft.Json;
+using System;
 
-namespace ImsGlobal.Caliper.Entities.Lis {
-	using ImsGlobal.Caliper.Entities.W3c;
+namespace ImsGlobal.Caliper.Entities.Lis
+{
+    /// <summary>
+    /// <para>
+    /// A Caliper CourseOffering represents the occurrence of a course or a type during a specified time period. 
+    /// CourseOffering is composed of a subset of properties specified in the IMS LTI 2.1 specification, which in turn, draws 
+    /// inspiration from the IMS LIS 1.0 specification.
+    /// </para>
+    /// </summary>
+    public class CourseOffering : Organization
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public CourseOffering()
+        {
+            Type = EntityType.CourseOffering;
+        }
 
-	/// <summary>
-	/// A CourseOffering is the occurrence of a course in a specific term,
-	/// semester, etc. A Caliper CourseOffering provides a subset of the
-	/// CourseOffering properties specified in the IMS LTI 2.0 specification,
-	/// which in turn, draws inspiration from the IMS LIS 1.0 specification.
-	/// </summary>
-	public class CourseOffering : Entity, ICourse {
+        public CourseOffering(Uri id) : base(id)
+        {
+            Type = EntityType.CourseOffering;
+        }
 
-		public CourseOffering( string id )
-			: base( id ) {
-			this.Type = EntityType.CourseOffering;
-		}
+        /// <summary>
+        /// A string value that constitutes a human-readable identifier for the CourseOffering.
+        /// </summary>
+        [JsonProperty("courseNumber", Order = 21)]
+        public string CourseNumber { get; set; }
 
-		[JsonProperty( "courseNumber", Order = 21 )]
-		public string CourseNumber { get; set; }
-
-		[JsonProperty( "academicSession", Order = 22 )]
-		public string AcademicSession { get; set; }
-
-		[JsonProperty( "subOrganizationOf", Order = 24 )]
-		public IOrganization SubOrganizationOf { get; set; }
-
-	}
-
+        /// <summary>
+        /// A string value that constitutes a human-readable identifier of the designated period in which this CourseOffering occurs
+        /// </summary>
+        [JsonProperty("academicSession", Order = 22)]
+        public string AcademicSession { get; set; }
+    }
 }

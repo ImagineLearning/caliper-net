@@ -3,7 +3,7 @@ using ImsGlobal.Caliper.Events;
 using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
@@ -41,7 +41,7 @@ namespace ImsGlobal.Caliper.Protocol
             var message = new CaliperMessage<T>
             {
                 SensorId = sensorId,
-                SendTime = SystemClock.Instance.GetCurrentInstant(),
+                SendTime = DateTime.UtcNow,
                 Data = data
             };
             var jsonString = JsonConvert.SerializeObject(message, serializerSettings);

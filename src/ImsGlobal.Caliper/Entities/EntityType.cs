@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace ImsGlobal.Caliper.Entities
 {
+    /// <summary>
+    /// Term for Entity.Type
+    /// </summary>
     [JsonConverter(typeof(JsonValueConverter<EntityType>))]
     public class EntityType : IType, IJsonValue
     {
@@ -99,7 +102,7 @@ namespace ImsGlobal.Caliper.Entities
 
         public EntityType(string value)
         {
-            this.Value = value;
+            Value = value;
         }
 
         public string Value { get; set; }

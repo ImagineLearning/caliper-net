@@ -20,7 +20,7 @@
     "id": "https://example.edu/terms/201601/courses/7/sections/1",
     "type": "CourseSection",
     "extensions": {
-        "edu_example_course_section_instructor": "https://example.edu/faculty/1234"
+      "edu_example_course_section_instructor": "https://example.edu/faculty/1234"
     }
   },
   "membership": {
@@ -33,7 +33,7 @@
     "dateCreated": "2016-08-01T06:00:00.000Z"
   },
   "federatedSession": {
-    "id": "urn:uuid:1c519ff7-3dfa-4764-be48-d2fb35a2925a",
+    "id": "https://example.com/sessions/c25fd3da-87fa-45f5-8875-b682113fa5ee",
     "type": "LtiSession",
     "user": "https://example.edu/users/554433",
     "messageParameters": {

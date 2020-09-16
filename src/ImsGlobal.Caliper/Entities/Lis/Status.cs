@@ -1,23 +1,24 @@
-﻿
+﻿using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
 
-namespace ImsGlobal.Caliper.Entities.Lis {
-	using ImsGlobal.Caliper.Entities.W3c;
-	using ImsGlobal.Caliper.Util;
 
-	[JsonConverter( typeof( JsonValueConverter<Status> ) )]
-	public sealed class Status : IStatus, IType, IJsonValue {
+namespace ImsGlobal.Caliper.Entities.Lis
+{
+    [JsonConverter(typeof(JsonValueConverter<Status>))]
+    public sealed class Status : IType, IJsonValue
+    {
 
-		public static readonly Status Active = new Status("Active");
-		public static readonly Status Inactive = new Status("Inactive");
+        public static readonly Status Active = new Status("Active");
+        public static readonly Status Inactive = new Status("Inactive");
 
-		public Status() {}
+        public Status() { }
 
-		public Status( string value ) {
-			this.Value = value;
-		}
+        public Status(string value)
+        {
+            Value = value;
+        }
 
-		public string Value { get; set; }
-	}
+        public string Value { get; set; }
+    }
 
 }

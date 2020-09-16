@@ -2,7 +2,6 @@
 
 namespace ImsGlobal.Caliper.Events.Session
 {
-
     public class SessionEvent : Event
     {
         /// <summary>

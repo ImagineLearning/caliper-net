@@ -17,7 +17,7 @@
     "dateCreated": "2016-11-15T10:15:00.000Z",
     "startedAtTime": "2016-11-15T10:15:00.000Z",
     "endedAtTime": "2016-11-15T11:15:00.000Z",
-    "duration": "PT3600S"
+    "duration": "PT1H"
   },
   "eventTime": "2016-11-15T11:15:00.000Z",
   "edApp": "https://example.edu"

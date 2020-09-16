@@ -1,21 +1,32 @@
 
 using Newtonsoft.Json;
+using System;
 
-namespace ImsGlobal.Caliper.Entities.Reading {
+namespace ImsGlobal.Caliper.Entities.Reading
+{
+    /// <summary>
+    /// A Caliper Frame represents a part, portion or segment of a DigitalResource.
+    /// </summary>
+    public class Frame : DigitalResource
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Frame()
+        {
+            Type = EntityType.Frame;
+        }
 
-	public class Frame : DigitalResource {
+        public Frame(Uri id) : base(id)
+        {
+            Type = EntityType.Frame;
+        }
 
-		public Frame( string id )
-			: base( id ) {
-			this.Type = EntityType.Frame;
-		}
 
-		/// <summary>
-		/// Numeric index of the location relative to sibling locations in the content.
-		/// </summary>
-		[JsonProperty( "index", Order = 21 )]
-		public int Index { get; set; }
-
-	}
-
+        /// <summary>
+        /// A non-negative integer that represents the position of the Frame.
+        /// </summary>
+        [JsonProperty("index", Order = 21)]
+        public int Index { get; set; }
+    }
 }

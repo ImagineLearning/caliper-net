@@ -1,17 +1,38 @@
+using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
+using System;
 
-namespace ImsGlobal.Caliper.Entities.Response {
+using NetCore = System.Text.Json.Serialization;
 
-	public class TrueFalseResponse : Response {
 
-		public TrueFalseResponse( string id )
-			: base( id ) {
-			this.Type = EntityType.TrueFalse;
-		}
+namespace ImsGlobal.Caliper.Entities.Response
+{
+    /// <summary>
+    /// A Caliper TrueFalseResponse represents a type of Response to an AssessmentItem in which only two possible options are 
+    /// provided (e.g., true/false, yes/no).
+    /// </summary>
+    public class TrueFalseResponse : Response
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public TrueFalseResponse()
+        {
+            Type = EntityType.TrueFalse;
+        }
 
-		[JsonProperty( "value", Order = 31 )]
-		public string Value { get; set; }
+        public TrueFalseResponse(Uri id) : base(id)
+        {
+            Type = EntityType.TrueFalse;
+        }
 
-	}
 
+        /// <summary>
+        /// A string value that provides the true/false, yes/no binary selection SHOULD be provided.
+        /// </summary>
+        [JsonProperty("value", Order = 31)]
+        [JsonConverter(typeof(CaliperBooleanNewtonsoftConverter))]
+        [NetCore.JsonConverter(typeof(CaliperBooleanConverter))]
+        public bool Value { get; set; }
+    }
 }

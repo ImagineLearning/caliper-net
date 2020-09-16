@@ -2,8 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NodaTime;
-using NodaTime.Serialization.JsonNet;
+
 
 namespace ImsGlobal.Caliper.Util
 {
@@ -14,7 +13,6 @@ namespace ImsGlobal.Caliper.Util
         static JsonSerializeUtils()
         {
             SerializerSettings = new JsonSerializerSettings();
-            SerializerSettings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
             SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
         }
@@ -86,7 +84,7 @@ namespace ImsGlobal.Caliper.Util
 
         private static bool IsCaliperDefaultContext(this JToken token)
         {
-            return token.ToString().Equals(CaliperContext.Context.Value);
+            return token.ToString().Equals(CaliperContext.Default.Value);
         }
     }
 }

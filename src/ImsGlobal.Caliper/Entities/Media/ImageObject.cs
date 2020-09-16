@@ -1,15 +1,22 @@
-namespace ImsGlobal.Caliper.Entities.Media {
-	using ImsGlobal.Caliper.Entities.SchemaDotOrg;
+using ImsGlobal.Caliper.Entities.SchemaDotOrg;
+using System;
 
-	/// <summary>
-	/// An image object embedded in a web page.
-	/// </summary>
-	public class ImageObject : MediaObject, IImageObject {
 
-		public ImageObject( string id )
-			: base( id, EntityType.ImageObject ) {
-		}
+namespace ImsGlobal.Caliper.Entities.Media
+{
+    /// <summary>
+    /// A Caliper ImageObject represents an image file.
+    /// </summary>
+    public class ImageObject : MediaObject, IImageObject
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public ImageObject()
+        {
+            Type = EntityType.ImageObject;
+        }
 
-	}
-
+        public ImageObject(Uri id) : base(id, EntityType.ImageObject) { }
+    }
 }

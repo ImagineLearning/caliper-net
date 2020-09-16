@@ -1,28 +1,36 @@
-﻿
+﻿using ImsGlobal.Caliper.Entities.Agent;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
-namespace ImsGlobal.Caliper.Entities.Lis {
-	using System.Collections.Generic;
-	using ImsGlobal.Caliper.Entities.Agent;
-	using ImsGlobal.Caliper.Entities.W3c;
 
-	/// <summary>
-	/// A Caliper LIS Group represents a Course substructure that a Person
-	/// is able to join as a member.
-	/// </summary>
-	public class Group : Entity, IOrganization {
+namespace ImsGlobal.Caliper.Entities.Lis
+{
+    /// <summary>
+    /// A Caliper Group represents an ad-hoc, informal or short-lived collection of people organized for some common educational 
+    /// or social purpose. A Group can act as an Agent. It can be linked both to a parent Organization and to its members.
+    /// </summary>
+    public class Group : Organization
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Group()
+        {
+            Type = EntityType.Group;
+        }
 
-		public Group( string id )
-			: base( id ) {
-			this.Type = EntityType.Group;
-		}
+        public Group(Uri id) : base(id)
+        {
+            Type = EntityType.Group;
+        }
 
-		[JsonProperty( "subOrganizationOf", Order = 22 )]
-		public IOrganization SubOrganizationOf { get; set; }
 
-		[JsonProperty("members", Order = 23)]
-		public IList<Entity> Members { get; set; }
-
-		}
-
+        /// <summary>
+        /// An ordered collection of Agent entities, typically of type Group and/or Person. Each array item MUST be expressed 
+        /// either as an object or as a string corresponding to the item’s IRI.
+        /// </summary>
+        [JsonProperty("members", Order = 23)]
+        public List<Agent.Agent> Members { get; set; }
+    }
 }

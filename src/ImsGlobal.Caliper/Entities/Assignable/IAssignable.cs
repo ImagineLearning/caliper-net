@@ -1,20 +1,20 @@
-﻿using NodaTime;
+﻿using System;
 
 namespace ImsGlobal.Caliper.Entities.Assignable
 {
     public interface IAssignable
     {
-        Instant? DateToActivate { get; }
+        DateTime? DateToActivate { get; }
 
-        Instant? DateToShow { get; }
+        DateTime? DateToShow { get; }
 
-        Instant? DateToStartOn { get; }
+        DateTime? DateToStartOn { get; }
 
-        Instant? DateToSubmit { get; }
+        DateTime? DateToSubmit { get; }
 
-        int MaxAttempts { get; }
+        uint? MaxAttempts { get; }
 
-        int MaxSubmits { get; }
+        uint? MaxSubmits { get; }
 
         double MaxScore { get; }
     }

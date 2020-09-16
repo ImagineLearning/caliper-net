@@ -1,11 +1,23 @@
-﻿namespace ImsGlobal.Caliper.Entities.Reading {
+﻿using System;
 
-	public class Document : DigitalResource {
+namespace ImsGlobal.Caliper.Entities.Reading
+{
+    /// <summary>
+    /// A Caliper Document represents textual content.
+    /// </summary>
+    public class Document : DigitalResource
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Document()
+        {
+            Type = EntityType.Document;
+        }
 
-		public Document ( string id )
-			: base( id ) {
-			this.Type = EntityType.Document;
-		}
-
-	}
+        public Document(Uri id) : base(id)
+        {
+            Type = EntityType.Document;
+        }
+    }
 }

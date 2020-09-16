@@ -1,15 +1,23 @@
-namespace ImsGlobal.Caliper.Entities.Media {
-	using ImsGlobal.Caliper.Entities.SchemaDotOrg;
+using ImsGlobal.Caliper.Entities.SchemaDotOrg;
+using System;
 
-	/// <summary>
-	/// A video object embedded in a web page.
-	/// </summary>
-	public class VideoObject : MediaObject, IVideoObject {
+namespace ImsGlobal.Caliper.Entities.Media
+{
+    /// <summary>
+    /// A Caliper VideoObject represents a visual recording stored in digital form.
+    /// </summary>
+    public class VideoObject : MediaObject, IVideoObject
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public VideoObject()
+        {
+            Type = EntityType.VideoObject;
+        }
 
-		public VideoObject( string id )
-			: base( id, EntityType.VideoObject ) {
-		}
-
-	}
-
+        public VideoObject(Uri id) : base(id, EntityType.VideoObject)
+        {
+        }
+    }
 }

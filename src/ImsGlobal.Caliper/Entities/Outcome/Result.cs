@@ -1,56 +1,62 @@
-﻿
+﻿using ImsGlobal.Caliper.Entities.Assignable;
 using Newtonsoft.Json;
+using System;
 
-namespace ImsGlobal.Caliper.Entities.Outcome {
-	using ImsGlobal.Caliper.Entities.Assignable;
-	using ImsGlobal.Caliper.Entities.Foaf;
+namespace ImsGlobal.Caliper.Entities.Outcome
+{
+    /// <summary>
+    /// A Caliper Result represents the current score or grade as recorded in a gradebook. The Result score value may represent 
+    /// an adjusted or scaled value and is considered mutable.
+    /// </summary>
+    public class Result : Entity
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Result()
+        {
+            Type = EntityType.Result;
+        }
 
-	public class Result : Entity {
+        public Result(Uri id) : base(id)
+        {
+            Type = EntityType.Result;
+        }
 
-		public Result( string id )
-			: base( id ) {
-			this.Type = EntityType.Result;
-		}
 
-		[JsonProperty("attempt", Order = 11)]
- 		public Attempt Attempt { get; set; }
+        /// <summary>
+        /// The associated Attempt. The attempt value MUST be expressed either as an object or as a string corresponding to the 
+        /// attempt’s IRI. If an object representation is provided, the Attempt SHOULD reference both the Person who generated 
+        /// the Attempt and the assigned DigitalResource.
+        /// </summary>
+        [JsonProperty("attempt", Order = 11)]
+        public Attempt Attempt { get; set; }
 
-		[JsonProperty( "maxResultScore", Order = 12 )]
-		public double MaxResultScore { get; set; } 
+        /// <summary>
+        /// A number with a fractional part denoted by a decimal separator that designates the maximum result score permitted.
+        /// </summary>
+        [JsonProperty("maxResultScore", Order = 12)]
+        public double? MaxResultScore { get; set; }
 
-		[JsonProperty("resultScore", Order = 13)]
-		public double ResultScore { get; set; } 
+        /// <summary>
+        /// A number with a fractional part denoted by a decimal separator that designates the actual result score awarded.
+        /// </summary>
+        [JsonProperty("resultScore", Order = 13)]
+        public double ResultScore { get; set; }
 
-		/* deprecated
-		[JsonProperty( "normalScore", Order = 12 )]
-		public double NormalScore { get; set; } */
+        /// <summary>
+        /// Plain text feedback provided by the scorer.
+        /// </summary>
+        [JsonProperty("comment", Order = 18)]
+        public string Comment { get; set; }
 
-		/* deprecated
-		[JsonProperty("penaltyScore", Order = 13 )]
-		public double PenaltyScore { get; set; } */
+        /// <summary>
+        /// The Agent who scored or graded the Attempt. The scoredBy value MUST be expressed either as an object or as a string 
+        /// corresponding to the scorer’s IRI.
+        /// </summary>
+        [JsonProperty("scoredBy", Order = 19)]
+        public Agent.Agent ScoredBy { get; set; }
 
-		/* deprecated
-		[JsonProperty( "extraCreditScore", Order = 14 )]
-		public int ExtraCreditScore { get; set; } */
-
-		/* deprecated
-		[JsonProperty( "totalScore", Order = 15 )]
-		public double TotalScore { get; set; } */
-
-		/* deprecated
-		[JsonProperty( "curvedTotalScore", Order = 16 )]
-		public int CurvedTotalScore { get; set; } */
-
-		/* deprecated
-		[JsonProperty( "curveFactor", Order = 17 )]
-		public int CurveFactor { get; set; } */
-
-		[JsonProperty( "comment", Order = 18 )]
-		public string Comment { get; set; }
-
-		[JsonProperty( "scoredBy", Order = 19 )]
-		public IAgent ScoredBy { get; set; }
-
-	}
+    }
 
 }

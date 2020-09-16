@@ -1,29 +1,59 @@
-﻿
+﻿using ImsGlobal.Caliper.Entities.Agent;
+using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
-using NodaTime;
+using System;
 
-namespace ImsGlobal.Caliper.Entities.Session {
-	using ImsGlobal.Caliper.Entities.Agent;
+using NetCore = System.Text.Json.Serialization;
 
-	public class Session : Entity {
 
-		public Session( string id )
-			: base( id ) {
-			this.Type = EntityType.Session;
-		}
+namespace ImsGlobal.Caliper.Entities.Session
+{
+    /// <summary>
+    /// A Caliper Session represents a web application user session.
+    /// </summary>
+    public class Session : Entity
+    {
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Session()
+        {
+            Type = EntityType.Session;
+        }
 
-		[JsonProperty( "user", Order = 11 )]
-		public Person User { get; set; }
+        public Session(Uri id) : base(id)
+        {
+            Type = EntityType.Session;
+        }
 
-		[JsonProperty( "startedAtTime", Order = 12 )]
-		public Instant? StartedAt { get; set; }
 
-		[JsonProperty( "endedAtTime", Order = 13 )]
-		public Instant? EndedAt { get; set; }
+        /// <summary>
+        /// The Person who initiated the Session.
+        /// </summary>
+        [JsonProperty("user", Order = 11)]
+        public Person User { get; set; }
 
-		[JsonProperty( "duration", Order = 14 )]
-		public Period Duration { get; set; }
+        /// <summary>
+        /// An ISO 8601 date and time value expressed with millisecond precision that describes when the Session was commenced. 
+        /// The value MUST be expressed using the format YYYY-MM-DDTHH:mm:ss.SSSZ set to UTC with no offset specified.
+        /// </summary>
+        [JsonProperty("startedAtTime", Order = 12)]
+        public DateTime? StartedAtTime { get; set; }
 
-	}
+        /// <summary>
+        /// An ISO 8601 date and time value expressed with millisecond precision that describes when the Session was completed 
+        /// or terminated. The value MUST be expressed using the format YYYY-MM-DDTHH:mm:ss.SSSZ set to UTC with no offset specified.
+        /// </summary>
+        [JsonProperty("endedAtTime", Order = 13)]
+        public DateTime? EndedAtTime { get; set; }
 
+        /// <summary>
+        /// A time interval that represents the time taken to complete the Session. If a duration is specified the value MUST 
+        /// conform to the ISO 8601 duration format.
+        /// </summary>
+        [JsonProperty("duration", Order = 14)]
+        [JsonConverter(typeof(CaliperDurationNewtonsoftConverter))]
+        [NetCore.JsonConverter(typeof(CaliperDurationConverter))]
+        public TimeSpan? Duration { get; set; }
+    }
 }
