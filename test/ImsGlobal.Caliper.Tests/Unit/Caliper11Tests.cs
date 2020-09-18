@@ -673,7 +673,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Extensions = new { value = "A Caliper Event describes a relationship established between an actor and an object.  The relationship is formed as a result of a purposeful action undertaken by the actor in connection to the object at a particular moment. A learner starting an assessment, annotating a reading, pausing a video, or posting a message to a forum, are examples of learning activities that Caliper models as events." }
             };
 
-            var coerced = JsonAssertions.coerce(entity, new[] { "..attempt.assignee" });
+            var coerced = JsonAssertions.Coerce(entity, new[] { "..attempt.assignee" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEntityResponseExtended");
         }
@@ -732,7 +732,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 DateCreated = Instant.FromUtc(2016, 11, 15, 10, 56, 00).ToDateTimeUtc(),
             };
 
-            var coerced = JsonAssertions.coerce(entity, new[] { "..attempt.assignee", "..attempt.assignable" });
+            var coerced = JsonAssertions.Coerce(entity, new[] { "..attempt.assignee", "..attempt.assignable" });
 
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEntityScore");
@@ -1034,7 +1034,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 }
             };
 
-            var coerced = JsonAssertions.coerce(envelope, new[]
+            var coerced = JsonAssertions.Coerce(envelope, new[]
             {
                 "..membership.member",
                 "..membership.organization",
@@ -1068,7 +1068,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 }
             };
 
-            var coerced = JsonAssertions.coerce(envelope, new string[]
+            var coerced = JsonAssertions.Coerce(envelope, new string[]
             {
                 "..membership.member",
                 "..membership.organization",
@@ -1192,7 +1192,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 }
             };
 
-            var coerced = JsonAssertions.coerce(envelope, new[]
+            var coerced = JsonAssertions.Coerce(envelope, new[]
             {
                 "..generated.assignable",
                 "..generated.assignee",
@@ -1240,7 +1240,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259
             };
 
-            var coerced = JsonAssertions.coerce(bookmarkEvent, new[]
+            var coerced = JsonAssertions.Coerce(bookmarkEvent, new[]
             {
                 "..generated.annotator",
                 "..generated.annotated",
@@ -1285,7 +1285,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259
             };
 
-            var coerced = JsonAssertions.coerce(highlightEvent, new[]
+            var coerced = JsonAssertions.Coerce(highlightEvent, new[]
             {
                 "..generated.annotator",
                 "..generated.annotated",
@@ -1328,7 +1328,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259
             };
 
-            var coerced = JsonAssertions.coerce(shareEvent, new[]
+            var coerced = JsonAssertions.Coerce(shareEvent, new[]
             {
                 "..generated.annotator",
                 "..generated.annotated",
@@ -1367,7 +1367,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259
             };
 
-            var coerced = JsonAssertions.coerce(tagEvent, new[]
+            var coerced = JsonAssertions.Coerce(tagEvent, new[]
             {
                 "..generated.annotator",
                 "..generated.annotated",
@@ -1412,7 +1412,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(assessmentItemEvent, new[]
+            var coerced = JsonAssertions.Coerce(assessmentItemEvent, new[]
             {
                 "..attempt.assignee",
                 "..attempt.isPartOf",
@@ -1437,7 +1437,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(assessmentItemEvent, new[] { "..membership.member", "..membership.organization" });
+            var coerced = JsonAssertions.Coerce(assessmentItemEvent, new[] { "..membership.member", "..membership.organization" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventAssessmentItemSkipped");
         }
@@ -1457,7 +1457,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(assessmentItemEvent, new[]
+            var coerced = JsonAssertions.Coerce(assessmentItemEvent, new[]
             {
                 "..membership.member",
                 "..membership.organization",
@@ -1483,7 +1483,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(assessmentEvent, new[]
+            var coerced = JsonAssertions.Coerce(assessmentEvent, new[]
             {
                 "..membership.member",
                 "..membership.organization",
@@ -1509,7 +1509,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(assessmentEvent, new[]
+            var coerced = JsonAssertions.Coerce(assessmentEvent, new[]
             {
                 "..generated.assignable",
                 "..generated.assignee",
@@ -1535,7 +1535,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu2
             };
 
-            var coerced = JsonAssertions.coerce(assignableEvent, new[] { "..membership.member", "..membership.organization" });
+            var coerced = JsonAssertions.Coerce(assignableEvent, new[] { "..membership.member", "..membership.organization" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventAssignableActivated");
         }
@@ -1593,7 +1593,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(forumEvent, new[] { "..membership.member", "..membership.organization" });
+            var coerced = JsonAssertions.Coerce(forumEvent, new[] { "..membership.member", "..membership.organization" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventForumSubscribed");
         }
@@ -1616,7 +1616,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            JObject coerced = JsonAssertions.coerce(mediaEvent, new[]
+            JObject coerced = JsonAssertions.Coerce(mediaEvent, new[]
             {
                 "..membership.member",
                 "..membership.organization",
@@ -1645,7 +1645,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(messageEvent, new[] { "..membership.member", "..membership.organization" });
+            var coerced = JsonAssertions.Coerce(messageEvent, new[] { "..membership.member", "..membership.organization" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventMessagePosted");
         }
@@ -1664,7 +1664,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.SessionCd50
             };
 
-            var coerced = JsonAssertions.coerce(messageEvent, new[] { "..membership.member", "..membership.organization" });
+            var coerced = JsonAssertions.Coerce(messageEvent, new[] { "..membership.member", "..membership.organization" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventMessageReplied");
         }
@@ -1685,7 +1685,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(navEvent, new[] {
+            var coerced = JsonAssertions.Coerce(navEvent, new[] {
                 "..membership.member",
                 "..membership.organization",
                 "..edApp"
@@ -1715,7 +1715,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 }
             };
 
-            var coerced = JsonAssertions.coerce(viewEvent, new[]
+            var coerced = JsonAssertions.Coerce(viewEvent, new[]
             {
                 "..membership.member",
                 "..membership.organization",
@@ -1741,7 +1741,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(navEvent, new[]
+            var coerced = JsonAssertions.Coerce(navEvent, new[]
             {
                 "..actor",
                 "..object",
@@ -1760,7 +1760,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
         public void EventGradeGraded_MatchesReferenceJson()
         {
             var gradeEvent = Caliper11TestEntities.GradeEvent1;
-            var coerced = JsonAssertions.coerce(gradeEvent, new[] { "..edApp", "..scoredBy", "..generated.attempt" });
+            var coerced = JsonAssertions.Coerce(gradeEvent, new[] { "..edApp", "..scoredBy", "..generated.attempt" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventGradeGraded");
         }
@@ -1779,7 +1779,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Group = Caliper11TestEntities.CourseSectionCPS43501Fall16
             };
 
-            var coerced = JsonAssertions.coerce(gradeEvent, new[]
+            var coerced = JsonAssertions.Coerce(gradeEvent, new[]
             {
                 "..edApp",
                 "..scoredBy",
@@ -1802,7 +1802,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259b
             };
 
-            var coerced = JsonAssertions.coerce(sessionEvent, new[] { "..edApp", "..session.user" });
+            var coerced = JsonAssertions.Coerce(sessionEvent, new[] { "..edApp", "..session.user" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventSessionLoggedIn");
         }
@@ -1821,7 +1821,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
 
             sessionEvent.Session.Extensions = new RequestExtension();
 
-            var coerced = JsonAssertions.coerce(sessionEvent, new[] { "..edApp", "..session.user" });
+            var coerced = JsonAssertions.Coerce(sessionEvent, new[] { "..edApp", "..session.user" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventSessionLoggedInExtended");
         }
@@ -1838,7 +1838,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259d
             };
 
-            var coerced = JsonAssertions.coerce(sessionEvent, new[] { "..edApp", "..session.user" });
+            var coerced = JsonAssertions.Coerce(sessionEvent, new[] { "..edApp", "..session.user" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventSessionLoggedOut");
         }
@@ -1862,7 +1862,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 EdApp = Caliper11TestEntities.SoftwareAppV2
             };
 
-            var coerced = JsonAssertions.coerce(sessionEvent, new[] { "..edApp" });
+            var coerced = JsonAssertions.Coerce(sessionEvent, new[] { "..edApp" });
 
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventSessionTimedOut");
         }
@@ -1881,7 +1881,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(threadEvent, new[] { "..membership.member", "..membership.organization" });
+            var coerced = JsonAssertions.Coerce(threadEvent, new[] { "..membership.member", "..membership.organization" });
             JsonAssertions.AssertSameObjectJson(coerced, "caliperEventThreadMarkedAsRead");
         }
 
@@ -1899,7 +1899,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(toolUseEvent, new[]
+            var coerced = JsonAssertions.Coerce(toolUseEvent, new[]
             {
                 "..membership.member",
                 "..membership.organization",
@@ -1923,7 +1923,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Session = Caliper11TestEntities.Session6259edu
             };
 
-            var coerced = JsonAssertions.coerce(viewEvent, new[]
+            var coerced = JsonAssertions.Coerce(viewEvent, new[]
             {
                 "..membership.member",
                 "..membership.organization",
@@ -1947,7 +1947,7 @@ namespace ImsGlobal.Caliper.Tests.Unit
                 Extensions = new ViewEventExtension1()
             };
 
-            var coerced = JsonAssertions.coerce(viewEvent, new[]
+            var coerced = JsonAssertions.Coerce(viewEvent, new[]
             {
                 "..membership.member",
                 "..membership.organization",

@@ -49,7 +49,7 @@ namespace ImsGlobal.Caliper.Tests.SimpleHelpers
         /// Reduce the objects selected by the given JPath query strings to properties 
         /// whose values are the id of the object.
         /// </summary>
-        public static JObject coerce(object input, string[] select)
+        public static JObject Coerce(object input, string[] select)
         {
 
             var jobj = JsonSerializeUtils.ToJObject(input);
