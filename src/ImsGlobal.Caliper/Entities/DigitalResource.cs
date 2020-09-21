@@ -1,5 +1,4 @@
-﻿using ImsGlobal.Caliper.Entities.SchemaDotOrg;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +10,7 @@ namespace ImsGlobal.Caliper.Entities
     /// <para>Caliper representation of a <see href="https://schema.org/CreativeWork">CreativeWork</see></para>
     /// <b>NOTE: Utilize DigitalResource only if no suitable subtype exists to represent the resource being described.</b>
     /// </summary>
-    public class DigitalResource : Entity, IResource, ICreativeWork
+    public class DigitalResource : Entity, IResource
     {
         /// <summary>
         /// An ordered collection of one or more LearningObjective entities that describe what a learner is expected to 

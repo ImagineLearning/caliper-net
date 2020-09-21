@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -27,6 +28,17 @@ namespace ImsGlobal.Caliper.Tests
             }
 
             return content;
+        }
+
+        public static T LoadJson<T>(string filename)
+        {
+            T item;
+            using (StreamReader reader = new StreamReader(filename))
+            {
+                item = JsonConvert.DeserializeObject<T>(reader.ReadToEnd());
+            }
+
+            return item;
         }
 
         public static string GetFixturesPath()

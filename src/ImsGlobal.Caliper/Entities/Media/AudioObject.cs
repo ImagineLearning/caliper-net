@@ -1,4 +1,3 @@
-using ImsGlobal.Caliper.Entities.SchemaDotOrg;
 using Newtonsoft.Json;
 using System;
 
@@ -8,7 +7,7 @@ namespace ImsGlobal.Caliper.Entities
     /// <summary>
     /// A Caliper AudioObject represents an audio or sound file.
     /// </summary>
-    public class AudioObject : MediaObject, IAudioObject
+    public class AudioObject : MediaObject
     {
         /// <summary>
         /// A string value indicating the minimum volume level permitted.

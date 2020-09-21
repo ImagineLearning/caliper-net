@@ -1,5 +1,4 @@
-﻿using ImsGlobal.Caliper.Entities.SchemaDotOrg;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 
 namespace ImsGlobal.Caliper.Entities
@@ -7,7 +6,7 @@ namespace ImsGlobal.Caliper.Entities
     /// <summary>
     /// A Caliper SoftwareApplication represents a computer program, application, module, platform or system.
     /// </summary>
-    public class SoftwareApplication : Agent, ISoftwareApplication
+    public class SoftwareApplication : Agent
     {
         /// <summary>
         /// An optional string value that designates the current form or version of this SoftwareApplication.

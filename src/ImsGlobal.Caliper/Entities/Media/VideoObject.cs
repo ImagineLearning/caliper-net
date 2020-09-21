@@ -1,4 +1,3 @@
-using ImsGlobal.Caliper.Entities.SchemaDotOrg;
 using System;
 
 namespace ImsGlobal.Caliper.Entities
@@ -6,7 +5,7 @@ namespace ImsGlobal.Caliper.Entities
     /// <summary>
     /// A Caliper VideoObject represents a visual recording stored in digital form.
     /// </summary>
-    public class VideoObject : MediaObject, IVideoObject
+    public class VideoObject : MediaObject
     {
         /// <summary>
         /// Parameterless constructor for JSON Deserialization

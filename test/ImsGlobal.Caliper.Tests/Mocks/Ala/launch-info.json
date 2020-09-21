@@ -1,0 +1,97 @@
+{
+  //  Standard LTI claims default values
+  "nbf": 1593685229, // not before time
+  "exp": 1593685529, //  expiry time
+  "iss": "https://user.lmsadmin-dev.wna.cloud", // issuer
+  "idp": "https://user.lmsadmin-dev.wna.cloud", // identity provider
+  "aud": "4a5e67b84e3607e8", // audiance 
+  "nonce": "5ea2277a72598563c4ed88854f457d0a6698e185700513733eb2883c614cde94",
+  "iat": 1593685186, // issued at time
+  "sid": "c741bca43a0060ddfbb95e93ac78312c", // session id
+  "auth_time": 1593685186, //  authentication time
+  "https://purl.imsglobal.org/spec/lti/claim/version": "1.3.0",
+  "https://purl.imsglobal.org/spec/lti/claim/message_type": "LtiResourceLinkRequest",
+  "https://purl.imsglobal.org/spec/lti/claim/deployment_id": "44fd89380f26065f",
+  "https://purl.imsglobal.org/spec/lti-nrps/claim/namesroleservice": {
+    "context_memberships_url": "https://user.lmsadmin-dev.wna.cloud/c1d887f0-a1a3-4bca-ae25-c375edcc131a/memberships",
+    "service_versions": [ "2.0" ]
+  },
+  // Stardard LTI provided values
+  "sub": "1", //  user_id of ALA platform
+  "family_name": "Mccommons", // Surname or last name
+  "given_name": "Ian", //  First name,
+  "email": "mccommons@gmail.com", // email address
+  "https://purl.imsglobal.org/spec/lti/claim/launch_presentation": {
+    "document_target": "window", // window or iframe
+    "return_url": "platform url" // Redirect URL for student from RAD
+  },
+  "https://purl.imsglobal.org/spec/lti/claim/roles": "http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student", // Learner or Student
+  "https://purl.imsglobal.org/spec/lti/claim/resource_link": {
+    "id": "200d101f-2c14-434a-a0f3-57c2a42369fd"
+  },
+  "https://purl.imsglobal.org/spec/lti/claim/target_link_uri": "https://mpng-admin.armstrong-qa-app.wna.cloud/Tool/", // tool target_link_uri
+  "https://purl.imsglobal.org/spec/lti/claim/context": {
+    "id": "c1d887f0-a1a3-4bca-ae25-c375edcc131a", // class id
+    "title": "Afternoon Intervention" // class name
+  },
+  "https://purl.imsglobal.org/spec/lti/claim/custom": {
+
+  },
+  "https://www.edgenuity.com/claim/educator_profile": {
+    "user_id": 123456,
+    "first_name": "Amarnath",
+    "last_name": "M S",
+    "role": "Teacher",
+    "account_status": "active",
+    "email": "amarnath@excelindia.com"
+  },
+  "https://www.edgenuity.com/claim/wne_context": {
+    "organizations": [
+      {
+        "id": 123456,
+        "name": "RIO RANCHO CYBER ACADEMY SCHOOL",
+        "parent_id": 12345,
+        "level": 0,
+        "type": "School" //we are not storing this yet
+      },
+      {
+        "id": 12345,
+        "name": "Rio Rancho Cyber Academy",
+        "parent_id": 1234,
+        "level": 1,
+        "type": "Region" //we are not storing this yet
+      },
+      {
+        "id": 1234,
+        "name": "RIO RANCHO PUBLIC SCHOOLS",
+        "parent_id": 123,
+        "level": 2,
+        "type": "District" //we are not storing this yet
+      },
+      {
+        "id": 123,
+        "name": "Rio Rancho Consortium",
+        "parent_id": 12,
+        "level": 3,
+        "type": "Consortium" //we are not storing this yet
+      },
+      {
+        "id": 12,
+        "name": "Cooperative Educational Services",
+        "parent_id": null,
+        "level": 4,
+        "type": "Organization" //we are not storing this yet
+      }
+    ],
+    "classes": [
+      {
+        "class_id": "c1d887f0-a1a3-4bca-ae25-c375edcc131a",
+        "class_name": "Afternoon Intervention",
+        "class_status": "Active",
+        "role": "Teacher",
+        "educator_class_enrollment_status": "Active",
+        "class_enrollment_date": "YYYY-MM-DD"
+      }
+    ]
+  }
+}

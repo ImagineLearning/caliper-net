@@ -178,6 +178,7 @@ namespace ImsGlobal.Caliper.Events
         /// or as a string corresponding to the edApp’s IRI.
         /// </summary>
         [JsonProperty("edApp", Order = 10)]
+        [NetCore.JsonPropertyName("edApp")]
         public SoftwareApplication EdApp { get; set; }
 
         /// <summary>

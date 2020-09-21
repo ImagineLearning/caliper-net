@@ -1,4 +1,3 @@
-using ImsGlobal.Caliper.Entities.SchemaDotOrg;
 using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
 using System;
@@ -12,7 +11,7 @@ namespace ImsGlobal.Caliper.Entities
     /// <para>A Caliper MediaObject represents a generic piece of media content</para>
     /// <b>NOTE: Utilize MediaObject only if no suitable subtype exists to represent the resource being described.</b>
     /// </summary>
-    public class MediaObject : DigitalResource, IMediaObject
+    public class MediaObject : DigitalResource
     {
         /// <summary>
         /// An optional time interval that represents the total time required to view and/or listen to the MediaObject at 

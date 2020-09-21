@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using NetCore = System.Text.Json.Serialization;
 
 
 namespace ImsGlobal.Caliper.Entities
@@ -51,6 +53,8 @@ namespace ImsGlobal.Caliper.Entities
         /// from the list of Caliper defined statuses.
         /// </summary>
         [JsonProperty("status", Order = 24)]
+        [JsonConverter(typeof(StringEnumConverter))]
+        [NetCore.JsonConverter(typeof(NetCore.JsonStringEnumConverter))]
         public Status Status { get; set; }
 
 

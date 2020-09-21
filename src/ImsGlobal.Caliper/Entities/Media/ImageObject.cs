@@ -1,4 +1,3 @@
-using ImsGlobal.Caliper.Entities.SchemaDotOrg;
 using System;
 
 
@@ -7,7 +6,7 @@ namespace ImsGlobal.Caliper.Entities
     /// <summary>
     /// A Caliper ImageObject represents an image file.
     /// </summary>
-    public class ImageObject : MediaObject, IImageObject
+    public class ImageObject : MediaObject
     {
         /// <summary>
         /// Parameterless constructor for JSON Deserialization
