@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace ImsGlobal.Caliper.Entities.Agent
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>
@@ -16,19 +16,6 @@ namespace ImsGlobal.Caliper.Entities.Agent
     public class Organization : Agent
     {
         /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public Organization()
-        {
-            Type = EntityType.Organization;
-        }
-
-        public Organization(Uri id) : base(id)
-        {
-            Type = EntityType.Organization;
-        }
-
-        /// <summary>
         /// <para>
         /// The parent Organization of this Organization. The subOrganizationOf value MUST be expressed either as an object or 
         /// as a string corresponding to the parent organization’s IRI.
@@ -38,5 +25,16 @@ namespace ImsGlobal.Caliper.Entities.Agent
         /// </summary>
         [JsonProperty("subOrganizationOf", Order = 12)]
         public Organization SubOrganizationOf { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Organization() { }
+
+        public Organization(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Organization;
     }
 }

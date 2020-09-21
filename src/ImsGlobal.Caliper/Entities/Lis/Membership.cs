@@ -1,10 +1,9 @@
-﻿using ImsGlobal.Caliper.Entities.Agent;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
 
-namespace ImsGlobal.Caliper.Entities.Lis
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>
@@ -25,20 +24,6 @@ namespace ImsGlobal.Caliper.Entities.Lis
     /// </summary>
     public class Membership : Entity
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public Membership()
-        {
-            Type = EntityType.Membership;
-        }
-
-        public Membership(Uri id) : base(id)
-        {
-            Type = EntityType.Membership;
-        }
-
-
         /// <summary>
         /// The Person associated with this Membership. The member value MUST be expressed either as an object or as a 
         /// string corresponding to the member’s IRI.
@@ -67,5 +52,16 @@ namespace ImsGlobal.Caliper.Entities.Lis
         /// </summary>
         [JsonProperty("status", Order = 24)]
         public Status Status { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Membership() { }
+
+        public Membership(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Membership;
     }
 }

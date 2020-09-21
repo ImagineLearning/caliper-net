@@ -1,32 +1,17 @@
-﻿using ImsGlobal.Caliper.Entities.Agent;
-using ImsGlobal.Caliper.Util;
+﻿using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
 using System;
 
 using NetCore = System.Text.Json.Serialization;
 
 
-namespace ImsGlobal.Caliper.Entities.Session
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper Session represents a web application user session.
     /// </summary>
     public class Session : Entity
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public Session()
-        {
-            Type = EntityType.Session;
-        }
-
-        public Session(Uri id) : base(id)
-        {
-            Type = EntityType.Session;
-        }
-
-
         /// <summary>
         /// The Person who initiated the Session.
         /// </summary>
@@ -55,5 +40,16 @@ namespace ImsGlobal.Caliper.Entities.Session
         [JsonConverter(typeof(CaliperDurationNewtonsoftConverter))]
         [NetCore.JsonConverter(typeof(CaliperDurationConverter))]
         public TimeSpan? Duration { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Session() { }
+
+        public Session(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Session;
     }
 }

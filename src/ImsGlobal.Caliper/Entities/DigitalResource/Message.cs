@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 
-namespace ImsGlobal.Caliper.Entities.Forum
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper Message is a digital form of written communication sent to a recipient. A series of messages may constitute 
@@ -11,20 +11,6 @@ namespace ImsGlobal.Caliper.Entities.Forum
     /// </summary>
     public class Message : DigitalResource
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public Message()
-        {
-            Type = EntityType.Message;
-        }
-
-        public Message(Uri id) : base(id)
-        {
-            Type = EntityType.Message;
-        }
-
-
         /// <summary>
         /// A Message that represents the post to which this Message is directed in reply. The replyTo value MUST be expressed 
         /// either as an object or as a string corresponding to the associated message’s IRI.
@@ -44,5 +30,16 @@ namespace ImsGlobal.Caliper.Entities.Forum
         /// </summary>
         [JsonProperty("attachments", Order = 22)]
         public List<DigitalResource> Attachments { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Message() { }
+
+        public Message(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Message;
     }
 }

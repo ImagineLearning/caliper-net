@@ -1,10 +1,8 @@
-﻿using ImsGlobal.Caliper.Entities.Agent;
-using ImsGlobal.Caliper.Entities.SchemaDotOrg;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 
 
-namespace ImsGlobal.Caliper.Entities.Annotation
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>
@@ -15,20 +13,6 @@ namespace ImsGlobal.Caliper.Entities.Annotation
     /// </summary>
     public class Annotation : Entity
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public Annotation()
-        {
-            Type = EntityType.Annotation;
-        }
-
-        public Annotation(Uri id) : base(id)
-        {
-            Type = EntityType.Annotation;
-        }
-
-
         /// <summary>
         /// The Person who created the Annotation. The annotator value MUST be expressed either as an object or as a string 
         /// corresponding to the annotator’s IRI.
@@ -42,5 +26,16 @@ namespace ImsGlobal.Caliper.Entities.Annotation
         /// </summary>
         [JsonProperty("annotated", Order = 21)]
         public DigitalResource Annotated { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Annotation() { }
+
+        public Annotation(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Annotation;
     }
 }

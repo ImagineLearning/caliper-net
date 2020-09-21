@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using ImsGlobal.Caliper.Entities.SchemaDotOrg;
+﻿using ImsGlobal.Caliper.Entities.SchemaDotOrg;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 
 namespace ImsGlobal.Caliper.Entities
@@ -13,19 +13,6 @@ namespace ImsGlobal.Caliper.Entities
     /// </summary>
     public class DigitalResource : Entity, IResource, ICreativeWork
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public DigitalResource()
-        {
-            Type = EntityType.DigitalResource;
-        }
-
-        public DigitalResource(Uri id) : base(id)
-        {
-            Type = EntityType.DigitalResource;
-        }
-
         /// <summary>
         /// An ordered collection of one or more LearningObjective entities that describe what a learner is expected to 
         /// comprehend or accomplish after engaging with the resource. Each array item MUST be expressed either as an object 
@@ -45,7 +32,7 @@ namespace ImsGlobal.Caliper.Entities
         /// being. Each array item MUST be expressed either as an object or as a string corresponding to the item’s IRI.
 		/// </summary>
 		[JsonProperty("creators", Order = 14)]
-        public List<Agent.Agent> Creators { get; set; } = new List<Agent.Agent>();
+        public List<Agent> Creators { get; set; } = new List<Agent>();
 
         /// <summary>
 		/// A string value drawn from the list of <see href="https://www.iana.org/assignments/media-types/media-types.xhtml">
@@ -75,5 +62,15 @@ namespace ImsGlobal.Caliper.Entities
         [JsonProperty("version", Order = 63)]
         public string Version { get; set; }
 
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public DigitalResource() { }
+
+        public DigitalResource(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.DigitalResource;
     }
 }

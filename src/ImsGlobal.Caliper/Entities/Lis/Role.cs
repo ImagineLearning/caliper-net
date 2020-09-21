@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Linq;
 
-namespace ImsGlobal.Caliper.Entities.Lis
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>

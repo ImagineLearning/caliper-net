@@ -1,12 +1,11 @@
-﻿using ImsGlobal.Caliper.Entities.Assignable;
-using ImsGlobal.Caliper.Util;
+﻿using ImsGlobal.Caliper.Util;
 using Newtonsoft.Json;
 using System;
 
 using NetCore = System.Text.Json.Serialization;
 
 
-namespace ImsGlobal.Caliper.Entities.Response
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>
@@ -17,20 +16,6 @@ namespace ImsGlobal.Caliper.Entities.Response
     /// </summary>
     public class Response : Entity
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public Response()
-        {
-            Type = EntityType.Response;
-        }
-
-        public Response(Uri id) : base(id)
-        {
-            Type = EntityType.Response;
-        }
-
-
         /// <summary>
         /// The associated Attempt. The attempt value MUST be expressed either as an object or as a string corresponding to 
         /// the attempt’s IRI. If an object representation is provided, the Attempt SHOULD reference both the Person who 
@@ -61,5 +46,16 @@ namespace ImsGlobal.Caliper.Entities.Response
         [JsonConverter(typeof(CaliperDurationNewtonsoftConverter))]
         [NetCore.JsonConverter(typeof(CaliperDurationConverter))]
         public TimeSpan? Duration { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Response() { }
+
+        public Response(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Response;
     }
 }

@@ -1,12 +1,11 @@
-﻿using ImsGlobal.Caliper.Entities.Agent;
-using ImsGlobal.Caliper.Util;
+﻿using ImsGlobal.Caliper.Util;
 using System;
 using Newtonsoft.Json;
 
 using NetCore = System.Text.Json.Serialization;
 
 
-namespace ImsGlobal.Caliper.Entities.Assignable
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper Attempt provides a count of the number of times an actor has interacted with an AssignableDigitalResource along 
@@ -15,19 +14,6 @@ namespace ImsGlobal.Caliper.Entities.Assignable
     /// </summary>
     public class Attempt : Entity
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public Attempt()
-        {
-            Type = EntityType.Attempt;
-        }
-
-        public Attempt(Uri id) : base(id)
-        {
-            Type = EntityType.Attempt;
-        }
-
         /// <summary>
         /// The DigitalResource that constitutes the object of the assignment. The assignable value MUST be expressed either 
         /// as an object or as a string corresponding to the assigned resource’s IRI.
@@ -78,5 +64,16 @@ namespace ImsGlobal.Caliper.Entities.Assignable
         /// </summary>
         [JsonProperty("isPartOf", Order = 17)]
         public Attempt IsPartOf { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Attempt() { }
+
+        public Attempt(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Attempt;
     }
 }

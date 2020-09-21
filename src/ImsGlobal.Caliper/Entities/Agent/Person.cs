@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ImsGlobal.Caliper.Entities.Agent
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>A Caliper Person represents a human being, alive or deceased, real or imaginary.</para>
@@ -13,9 +13,9 @@ namespace ImsGlobal.Caliper.Entities.Agent
     /// </summary>
     public class Person : Agent
     {
-        public Person(Uri id) : base(id)
-        {
-            Type = EntityType.Person;
-        }
+        public Person(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Person;
     }
 }

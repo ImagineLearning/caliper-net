@@ -1,7 +1,8 @@
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace ImsGlobal.Caliper.Entities.Annotation
+
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper TextPositionSelector represents a fragment or selection of textual content, the starting and ending positions 
@@ -9,18 +10,6 @@ namespace ImsGlobal.Caliper.Entities.Annotation
     /// </summary>
     public class TextPositionSelector : Selector
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public TextPositionSelector() : base(SelectorType.Text) { }
-
-        public TextPositionSelector(int start, int end) : base(SelectorType.Text)
-        {
-            Start = start;
-            End = end;
-        }
-
-
         /// <summary>
         /// <b>REQUIRED:</b> The starting position of the selected text MUST be specified. The first character in the full text 
         /// is character position 0.
@@ -36,6 +25,17 @@ namespace ImsGlobal.Caliper.Entities.Annotation
         [JsonProperty("end", Order = 2)]
         public int End { get; set; }
 
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public TextPositionSelector() : base(SelectorType.TextPositionSelector) { }
+
+        public TextPositionSelector(int start, int end) : base(SelectorType.TextPositionSelector)
+        {
+            Start = start;
+            End = end;
+        }
     }
 
 }

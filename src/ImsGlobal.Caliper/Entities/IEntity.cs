@@ -28,7 +28,7 @@ namespace ImsGlobal.Caliper.Entities
         /// context document. For a generic Entity set the type value to the term Entity. If a subtype of Entity is created, set 
         /// the type to the Term corresponding to the subtype utilized, e.g., Person.
         /// </summary>
-        IType Type { get; }
+        EntityType Type { get; }
 
         /// <summary>
         /// A string value comprising a word or phrase by which the Entity is known.

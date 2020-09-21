@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ImsGlobal.Caliper.Entities.Reading
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper Page represents an item of paginated content.
@@ -10,14 +10,11 @@ namespace ImsGlobal.Caliper.Entities.Reading
         /// <summary>
         /// Parameterless constructor for JSON Deserialization
         /// </summary>
-        public Page()
-        {
-            Type = EntityType.Page;
-        }
+        public Page() { }
 
-        public Page(Uri id) : base(id)
-        {
-            Type = EntityType.Page;
-        }
+        public Page(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Page;
     }
 }

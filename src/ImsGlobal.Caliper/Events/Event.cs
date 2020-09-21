@@ -1,10 +1,10 @@
 ﻿using ImsGlobal.Caliper.Entities;
-using ImsGlobal.Caliper.Entities.Agent;
-using ImsGlobal.Caliper.Entities.Lis;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using System.Linq;
 using NetCore = System.Text.Json.Serialization;
 
 
@@ -30,6 +30,13 @@ namespace ImsGlobal.Caliper.Events
     /// </summary>
     public class Event
     {
+        CaliperAction action;
+        Agent actor;
+        Entity eventObject;
+        Entity target;
+        Entity generatedObject;
+
+
         /// <summary>
         /// parameterless constructor required for JSON Deserialization
         /// </summary>
@@ -68,7 +75,9 @@ namespace ImsGlobal.Caliper.Events
         /// </summary>
         [Required]
         [JsonProperty("type", Order = 3)]
-        public EventType Type { get; set; } = EventType.Event;
+        [JsonConverter(typeof(StringEnumConverter))]
+        [NetCore.JsonConverter(typeof(NetCore.JsonStringEnumConverter))]
+        public virtual EventType Type => GetEventType();
 
         /// <summary>
         /// <b>REQUIRED:</b> The Agent who initiated the Event, typically though not always a Person. The actor value MUST be 
@@ -76,7 +85,15 @@ namespace ImsGlobal.Caliper.Events
         /// </summary>
         [Required]
         [JsonProperty("actor", Order = 4)]
-        public Agent Actor { get; set; }
+        public Agent Actor
+        {
+            get => actor;
+            set
+            {
+                CheckSupport(GetSupportedActors(), value.Type);
+                actor = value;
+            }
+        }
 
         /// <summary>
         /// <b>REQUIRED:</b> The action or predicate that binds the actor or subject to the object. The action range is limited 
@@ -85,7 +102,17 @@ namespace ImsGlobal.Caliper.Events
         /// </summary>
         [Required]
         [JsonProperty("action", Order = 5)]
-        public Action Action { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        [NetCore.JsonConverter(typeof(NetCore.JsonStringEnumConverter))]
+        public CaliperAction Action
+        {
+            get => action;
+            set
+            {
+                CheckSupport(GetSupportedActions(), value);
+                action = value;
+            }
+        }
 
         /// <summary>
         /// <b>REQUIRED:</b> The Entity that comprises the object of the interaction. The object value MUST be expressed either 
@@ -93,25 +120,54 @@ namespace ImsGlobal.Caliper.Events
         /// </summary>
         [Required]
         [JsonProperty("object", Order = 6)]
-        public Entity Object { get; set; }
+        public Entity Object
+        {
+            get => eventObject;
+            set
+            {
+                CheckSupport(GetSupportedObjects(), value.Type);
+                eventObject = value;
+            }
+        }
 
         /// <summary>
         /// An Entity that represents a particular segment or location within the object. The target value MUST be expressed 
         /// either as an object or as a string corresponding to the target entity’s IRI.
         /// </summary>
         [JsonProperty("target", Order = 7)]
-        public Entity Target { get; set; }
+        public Entity Target
+        {
+            get => target;
+            set
+            {
+                CheckSupport(GetSupportedTargets(), value.Type);
+                target = value;
+            }
+        }
 
         /// <summary>
         /// An Entity created or generated as a result of the interaction. The generated value MUST be expressed either as an 
         /// object or as a string corresponding to the generated entity’s IRI.
         /// </summary>
         [JsonProperty("generated", Order = 8)]
-        public Entity Generated { get; set; }
+        public virtual Entity Generated
+        {
+            get => generatedObject;
+            set
+            {
+                CheckSupport(GetSupportedGeneratedEntities(), value.Type);
+                generatedObject = value;
+            }
+        }
 
         /// <summary>
-		/// <b>REQUIRED:</b> An ISO 8601 date and time value expressed with millisecond precision that indicates when the Event 
+		/// <para>
+        /// <b>REQUIRED:</b> An ISO 8601 date and time value expressed with millisecond precision that indicates when the Event 
         /// occurred. The value MUST be expressed using the format YYYY-MM-DDTHH:mm:ss.SSSZ set to UTC with no offset specified.
+        /// </para>
+        /// <para>
+        /// <b>NOTE: Defaults to the UTC time when the event is instantiated</b>
+        /// </para>
 		/// </summary>
         [Required]
         [JsonProperty("eventTime", Order = 9)]
@@ -144,14 +200,14 @@ namespace ImsGlobal.Caliper.Events
         /// federatedSession’s IRI.
         /// </summary>
         [JsonProperty("federatedSession", Order = 13)]
-        public Entities.Session.LtiSession FederatedSession { get; set; }
+        public LtiSession FederatedSession { get; set; }
 
         /// <summary>
 		/// The current user Session. The session value MUST be expressed either as an object or as a string corresponding to 
         /// the session’s IRI.
 		/// </summary>
 		[JsonProperty("session", Order = 14)]
-        public Entities.Session.Session Session { get; set; }
+        public Session Session { get; set; }
 
         /// <summary>
         /// A map of additional attributes not defined by the model MAY be specified for a more concise representation of the Event.
@@ -166,5 +222,29 @@ namespace ImsGlobal.Caliper.Events
         /// </summary>
         [JsonProperty("referrer", Order = 16)]
         public Entity Referrer { get; set; }
+
+
+        protected virtual EventType GetEventType() => EventType.Event;
+
+        protected virtual IEnumerable<CaliperAction> GetSupportedActions() => null;
+
+        protected virtual IEnumerable<EntityType> GetSupportedActors() => null;
+
+        protected virtual IEnumerable<EntityType> GetSupportedObjects() => null;
+
+        protected virtual IEnumerable<EntityType> GetSupportedTargets() => null;
+
+        protected virtual IEnumerable<EntityType> GetSupportedGeneratedEntities() => null;
+
+        private void CheckSupport<T>(IEnumerable<T> supportedValues, T value)
+        {
+            if (supportedValues == null || supportedValues.Contains(value))
+                return;
+
+            //throw new ArgumentOutOfRangeException(
+            //    $"{value} is not a supported {typeof(T).Name}. " +
+            //    $"{Type} only supports {string.Join(", ", supportedValues)}"
+            //);
+        }
     }
 }

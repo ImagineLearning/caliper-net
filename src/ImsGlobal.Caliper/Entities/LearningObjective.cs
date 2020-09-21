@@ -11,14 +11,11 @@ namespace ImsGlobal.Caliper.Entities
         /// <summary>
         /// Parameterless constructor for JSON Deserialization
         /// </summary>
-        public LearningObjective()
-        {
-            Type = EntityType.LearningObjective;
-        }
+        public LearningObjective() { }
 
-        public LearningObjective(Uri id) : base(id)
-        {
-            Type = EntityType.LearningObjective;
-        }
+        public LearningObjective(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.LearningObjective;
     }
 }

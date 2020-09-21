@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using System;
 
 
-namespace ImsGlobal.Caliper.Entities.Assignable
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>
@@ -11,22 +11,8 @@ namespace ImsGlobal.Caliper.Entities.Assignable
     /// </para>
     /// <b>NOTE: Utilize AssignableDigitalResource only if no suitable subtype exists to represent the resource being described</b>
     /// </summary>
-    public class AssignableDigitalResource : DigitalResource, IAssignable
+    public class AssignableDigitalResource : DigitalResource
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public AssignableDigitalResource()
-        {
-            Type = EntityType.AssignableDigitalResource;
-        }
-
-        public AssignableDigitalResource(Uri id) : base(id)
-        {
-            Type = EntityType.AssignableDigitalResource;
-        }
-
-
         /// <summary>
         /// An ISO 8601 date and time value expressed with millisecond precision that describes when the resource was activated. 
         /// The value MUST be expressed using the format YYYY-MM-DDTHH:mm:ss.SSSZ set to UTC with no offset specified.
@@ -74,5 +60,16 @@ namespace ImsGlobal.Caliper.Entities.Assignable
         /// </summary>
         [JsonProperty("maxScore", Order = 29)]
         public double MaxScore { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public AssignableDigitalResource() { }
+
+        public AssignableDigitalResource(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.AssignableDigitalResource;
     }
 }

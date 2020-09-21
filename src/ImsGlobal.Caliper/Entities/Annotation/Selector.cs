@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using NetCore = System.Text.Json.Serialization;
 
-namespace ImsGlobal.Caliper.Entities.Annotation
+
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// Base type for all PositionSelector types. As of Caliper 1.1, 
@@ -15,6 +18,8 @@ namespace ImsGlobal.Caliper.Entities.Annotation
 
 
         [JsonProperty("type", Order = 0)]
-        public IType Type { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        [NetCore.JsonConverter(typeof(NetCore.JsonStringEnumConverter))]
+        public SelectorType Type { get; }
     }
 }

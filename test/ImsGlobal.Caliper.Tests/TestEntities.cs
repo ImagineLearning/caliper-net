@@ -1,17 +1,8 @@
+using ImsGlobal.Caliper.Entities;
+using ImsGlobal.Caliper.Events;
+using NodaTime;
 using System;
 using System.Collections.Generic;
-using ImsGlobal.Caliper.Entities;
-using ImsGlobal.Caliper.Entities.Agent;
-using ImsGlobal.Caliper.Entities.Assessment;
-using ImsGlobal.Caliper.Entities.Assignable;
-using ImsGlobal.Caliper.Entities.Forum;
-using ImsGlobal.Caliper.Entities.Lis;
-using ImsGlobal.Caliper.Entities.Media;
-using ImsGlobal.Caliper.Entities.Outcome;
-using ImsGlobal.Caliper.Entities.Reading;
-using ImsGlobal.Caliper.Entities.Session;
-using ImsGlobal.Caliper.Events.Outcome;
-using NodaTime;
 
 
 namespace ImsGlobal.Caliper.Tests
@@ -357,7 +348,7 @@ namespace ImsGlobal.Caliper.Tests
             };
 
         public static GradeEvent GradeEvent1 { get; }
-            = new GradeEvent("urn:uuid:a50ca17f-5971-47bb-8fca-4e6e6879001d", Events.Action.Graded)
+            = new GradeEvent("urn:uuid:a50ca17f-5971-47bb-8fca-4e6e6879001d", CaliperAction.Graded)
             {
                 Actor = AutoGraderV2,
                 Object = Attempt1d,

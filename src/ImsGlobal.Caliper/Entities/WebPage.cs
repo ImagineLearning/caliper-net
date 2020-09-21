@@ -1,5 +1,6 @@
 using System;
 
+
 namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
@@ -10,14 +11,11 @@ namespace ImsGlobal.Caliper.Entities
         /// <summary>
         /// Parameterless constructor for JSON Deserialization
         /// </summary>
-        public WebPage()
-        {
-            Type = EntityType.WebPage;
-        }
+        public WebPage() { }
 
-        public WebPage(Uri id) : base(id)
-        {
-            this.Type = EntityType.WebPage;
-        }
+        public WebPage(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.WebPage;
     }
 }

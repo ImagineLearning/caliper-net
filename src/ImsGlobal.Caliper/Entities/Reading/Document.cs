@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace ImsGlobal.Caliper.Entities.Reading
+
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper Document represents textual content.
@@ -10,14 +11,11 @@ namespace ImsGlobal.Caliper.Entities.Reading
         /// <summary>
         /// Parameterless constructor for JSON Deserialization
         /// </summary>
-        public Document()
-        {
-            Type = EntityType.Document;
-        }
+        public Document() { }
 
-        public Document(Uri id) : base(id)
-        {
-            Type = EntityType.Document;
-        }
+        public Document(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Document;
     }
 }

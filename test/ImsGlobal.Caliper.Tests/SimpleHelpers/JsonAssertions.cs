@@ -25,19 +25,15 @@ namespace ImsGlobal.Caliper.Tests.SimpleHelpers
 
             bool equals = JToken.DeepEquals(refJObject, eventJObject);
 
+            string error = "";
             if (!equals)
             {
                 var jdp = new JsonDiffPatchDotNet.JsonDiffPatch();
                 JToken patch = jdp.Diff(eventJObject, refJObject);
-                Console.WriteLine("diff:");
-                Console.WriteLine(patch);
-                Console.WriteLine("fixture:");
-                Console.WriteLine(refJObject);
-                Console.WriteLine("created:");
-                Console.WriteLine(eventJObject);
+                error = patch.ToString();
             }
 
-            Assert.True(equals);
+            Assert.True(equals, "Json mismatch " + error);
         }
 
         public static void AssertSameObjectJson(object obj, string eventReferenceFile)

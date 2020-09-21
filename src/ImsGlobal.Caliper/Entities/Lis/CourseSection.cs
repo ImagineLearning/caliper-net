@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace ImsGlobal.Caliper.Entities.Lis
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>
@@ -22,25 +22,20 @@ namespace ImsGlobal.Caliper.Entities.Lis
     public class CourseSection : CourseOffering
     {
         /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public CourseSection()
-        {
-            Type = EntityType.CourseSection;
-        }
-
-        public CourseSection(Uri id) : base(id)
-        {
-            Type = EntityType.CourseSection;
-        }
-
-
-        /// <summary>
         /// A string value that characterizes the purpose of the section such as “lecture”, “lab” or “seminar”.
         /// </summary>
         [JsonProperty("category", Order = 20)]
         public string Category { get; set; }
 
-    }
 
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public CourseSection() { }
+
+        public CourseSection(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.CourseSection;
+    }
 }

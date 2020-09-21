@@ -1,8 +1,8 @@
 ﻿using System;
-using ImsGlobal.Caliper.Entities.Assignable;
 using Newtonsoft.Json;
 
-namespace ImsGlobal.Caliper.Entities.Outcome
+
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper Score represents a “raw” or unadjusted numeric score or grade awarded for a given assignment submission. 
@@ -10,20 +10,6 @@ namespace ImsGlobal.Caliper.Entities.Outcome
     /// </summary>
     public class Score : Entity
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public Score()
-        {
-            Type = EntityType.Score;
-        }
-
-        public Score(Uri id) : base(id)
-        {
-            Type = EntityType.Score;
-        }
-
-
         /// <summary>
         /// he associated Attempt. The attempt value MUST be expressed either as an object or as a string corresponding to the 
         /// attempt’s IRI. If an object representation is provided, the Attempt SHOULD reference both the Person who generated 
@@ -55,6 +41,17 @@ namespace ImsGlobal.Caliper.Entities.Outcome
         /// string corresponding to the scorer’s IRI.
         /// </summary>
         [JsonProperty("scoredBy", Order = 15)]
-        public Agent.Agent ScoredBy { get; set; }
+        public Agent ScoredBy { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public Score() { }
+
+        public Score(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Score;
     }
 }

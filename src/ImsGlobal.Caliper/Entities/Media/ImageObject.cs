@@ -2,7 +2,7 @@ using ImsGlobal.Caliper.Entities.SchemaDotOrg;
 using System;
 
 
-namespace ImsGlobal.Caliper.Entities.Media
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper ImageObject represents an image file.
@@ -12,11 +12,11 @@ namespace ImsGlobal.Caliper.Entities.Media
         /// <summary>
         /// Parameterless constructor for JSON Deserialization
         /// </summary>
-        public ImageObject()
-        {
-            Type = EntityType.ImageObject;
-        }
+        public ImageObject() { }
 
-        public ImageObject(Uri id) : base(id, EntityType.ImageObject) { }
+        public ImageObject(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.ImageObject;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations;
+using NetCore = System.Text.Json.Serialization;
 
 namespace ImsGlobal.Caliper.Entities
 {
@@ -46,7 +48,13 @@ namespace ImsGlobal.Caliper.Entities
         /// </summary>
         [Required]
         [JsonProperty("type", Order = 2)]
-        public IType Type { get; protected set; } = EntityType.Entity;
+        [JsonConverter(typeof(StringEnumConverter))]
+        [NetCore.JsonConverter(typeof(NetCore.JsonStringEnumConverter))]
+        public EntityType Type
+        {
+            get => GetEntityType();
+            set { }
+        }
 
         /// <summary>
         /// A string value comprising a word or phrase by which the Entity is known.
@@ -79,5 +87,8 @@ namespace ImsGlobal.Caliper.Entities
         /// </summary>
         [JsonProperty("extensions", Order = 51)]
         public object Extensions { get; set; }
+
+
+        protected virtual EntityType GetEntityType() => EntityType.Entity;
     }
 }

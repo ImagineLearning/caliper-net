@@ -3,24 +3,13 @@ using Newtonsoft.Json;
 using System;
 
 
-namespace ImsGlobal.Caliper.Entities.Media
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper AudioObject represents an audio or sound file.
     /// </summary>
     public class AudioObject : MediaObject, IAudioObject
     {
-        /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public AudioObject()
-        {
-            Type = EntityType.AudioObject;
-        }
-
-        public AudioObject(Uri id) : base(id, EntityType.AudioObject) { }
-
-
         /// <summary>
         /// A string value indicating the minimum volume level permitted.
         /// </summary>
@@ -44,5 +33,16 @@ namespace ImsGlobal.Caliper.Entities.Media
         /// </summary>
         [JsonProperty("muted", Order = 84)]
         public bool? Muted { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public AudioObject() { }
+
+        public AudioObject(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.AudioObject;
     }
 }

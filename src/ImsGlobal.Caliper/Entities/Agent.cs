@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace ImsGlobal.Caliper.Entities.Agent
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// A Caliper Agent is a generic type that represents an Entity that can initiate or perform an action.
@@ -15,14 +15,11 @@ namespace ImsGlobal.Caliper.Entities.Agent
         /// <summary>
         /// Parameterless constructor for JSON Deserialization
         /// </summary>
-        public Agent()
-        {
-            Type = EntityType.Agent;
-        }
+        public Agent() { }
 
-        public Agent(Uri id) : base(id)
-        {
-            Type = EntityType.Agent;
-        }
+        public Agent(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.Agent;
     }
 }

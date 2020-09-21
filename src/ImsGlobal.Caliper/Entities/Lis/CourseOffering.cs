@@ -1,9 +1,8 @@
-﻿
-using ImsGlobal.Caliper.Entities.Agent;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 
-namespace ImsGlobal.Caliper.Entities.Lis
+
+namespace ImsGlobal.Caliper.Entities
 {
     /// <summary>
     /// <para>
@@ -15,19 +14,6 @@ namespace ImsGlobal.Caliper.Entities.Lis
     public class CourseOffering : Organization
     {
         /// <summary>
-        /// Parameterless constructor for JSON Deserialization
-        /// </summary>
-        public CourseOffering()
-        {
-            Type = EntityType.CourseOffering;
-        }
-
-        public CourseOffering(Uri id) : base(id)
-        {
-            Type = EntityType.CourseOffering;
-        }
-
-        /// <summary>
         /// A string value that constitutes a human-readable identifier for the CourseOffering.
         /// </summary>
         [JsonProperty("courseNumber", Order = 21)]
@@ -38,5 +24,16 @@ namespace ImsGlobal.Caliper.Entities.Lis
         /// </summary>
         [JsonProperty("academicSession", Order = 22)]
         public string AcademicSession { get; set; }
+
+
+        /// <summary>
+        /// Parameterless constructor for JSON Deserialization
+        /// </summary>
+        public CourseOffering() { }
+
+        public CourseOffering(Uri id) : base(id) { }
+
+
+        protected override EntityType GetEntityType() => EntityType.CourseOffering;
     }
 }
